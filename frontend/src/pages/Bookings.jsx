@@ -8,6 +8,7 @@ import Select from '../components/forms/Select';
 import Badge from '../components/ui/Badge';
 import Modal from '../components/modal/Modal';
 import Textarea from '../components/forms/Textarea';
+import DatePicker from '../components/forms/DatePicker';
 import api from '../services/api';
 
 const Bookings = () => {
