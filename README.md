@@ -30,7 +30,9 @@ AssetFlow is a web-based ERP platform designed to help organizations manage thei
 
 ## Team
 
-- Varnan Rajput
+- Varnan Rajput (team leader)
+- Rahul Malviya
+- Hrutu Talaviya
 
 ## Status
 
