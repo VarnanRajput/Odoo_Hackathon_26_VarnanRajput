@@ -1,0 +1,33 @@
+# dependencies
+node_modules/
+
+# environment files
+.env
+.env.local
+.env.*
+
+# logs
+logs
+*.log
+npm-debug.log*
+
+# build folders
+dist/
+build/
+
+# editor files
+.vscode/
+.idea/
+
+# operating system
+.DS_Store
+Thumbs.db
+
+# coverage
+coverage/
+
+# vite
+frontend/dist/
+
+# uploads (optional)
+uploads/
