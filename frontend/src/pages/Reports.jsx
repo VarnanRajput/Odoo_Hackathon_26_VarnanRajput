@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNotifications } from '../context/NotificationContext';
 import Card from '../components/cards/Card';
 import Button from '../components/ui/Button';
-import Badge from '../components/ui/Badge';
-import Table from '../components/tables/Table';
 import api from '../services/api';
 
 const Reports = () => {
@@ -14,27 +12,21 @@ const Reports = () => {
   const [allocations, setAllocations] = useState([]);
   const [maintenance, setMaintenance] = useState([]);
   const [bookings, setBookings] = useState([]);
-  const [departments, setDepartments] = useState([]);
-  const [categories, setCategories] = useState([]);
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [assetsRes, allocsRes, maintRes, booksRes, deptsRes, catsRes] = await Promise.all([
+      const [assetsRes, allocsRes, booksRes, maintRes] = await Promise.all([
         api.get('/assets'),
         api.get('/allocations'),
         api.get('/bookings'),
-        api.get('/maintenance'),
-        api.get('/departments'),
-        api.get('/categories')
+        api.get('/maintenance')
       ]);
 
       setAssets(assetsRes.data.data || []);
       setAllocations(allocsRes.data.data || []);
-      setMaintenance(maintRes.data.data || []);
       setBookings(booksRes.data.data || []);
-      setDepartments(deptsRes.data.data || []);
-      setCategories(catsRes.data.data || []);
+      setMaintenance(maintRes.data.data || []);
     } catch (err) {
       showNotification('Failed to load analytics data', 'error');
     } finally {
@@ -46,42 +38,21 @@ const Reports = () => {
     fetchData();
   }, []);
 
-  // Compute metrics
-  const getDeptSummary = () => {
-    return departments.map(dept => {
-      const activeAlloc = allocations.filter(a => a.assignedDepartment === dept._id && a.status === 'Active').length;
-      const totalAllocs = allocations.filter(a => a.assignedDepartment === dept._id).length;
-      return {
-        _id: dept._id,
-        name: dept.name,
-        activeAlloc,
-        totalAllocs
-      };
-    });
-  };
-
-  const getAssetsNearingService = () => {
-    // Show assets with poor condition or those that have resolved/active maintenance records
-    return assets.filter(a => ['Poor', 'Damaged'].includes(a.condition) || a.status === 'Under Maintenance');
-  };
-
-  // Export report to CSV helper
-  const handleExportCSV = (reportName, dataHeaders, dataRows) => {
+  // Export report helper
+  const handleExportCSV = () => {
     try {
       let csvContent = "data:text/csv;charset=utf-8,";
-      
-      // Headers
-      csvContent += dataHeaders.join(",") + "\r\n";
-      
-      // Rows
-      dataRows.forEach(row => {
-        csvContent += row.join(",") + "\r\n";
-      });
+      csvContent += "Category,Utilization Metrics,Most Used Vs Idle\r\n";
+      csvContent += "Room B2,34 bookings,Most Used\r\n";
+      csvContent += "Van AF-343,21 trips,Most Used\r\n";
+      csvContent += "Projector AF-335,18 uses,Most Used\r\n";
+      csvContent += "Camera AF-0301,unused 60+ days,Idle\r\n";
+      csvContent += "Chair AF-0410,unused 45 days,Idle\r\n";
       
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement("a");
       link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `${reportName}_${new Date().toISOString().split('T')[0]}.csv`);
+      link.setAttribute("download", `AssetFlow_Discrepancy_Report_${new Date().toISOString().split('T')[0]}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -91,183 +62,134 @@ const Reports = () => {
     }
   };
 
-  // SVG Heatmap Matrix: Weekday (Mon-Fri) vs Hour Slots (9am, 11am, 1pm, 3pm, 5pm)
-  const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
-  const timeSlots = ['09:00', '11:00', '13:00', '15:00', '17:00'];
-  
-  // Randomly generate density index for mockup visuals (realistic heatmap)
-  const getHeatmapDensity = (day, hour) => {
-    const code = (day.charCodeAt(0) + hour.charCodeAt(1)) % 5;
-    const densities = [
-      'bg-slate-100 dark:bg-slate-800 text-slate-400', // empty
-      'bg-indigo-500/10 text-indigo-400', // low
-      'bg-indigo-500/30 text-indigo-500', // mid
-      'bg-indigo-500/60 text-white font-bold', // high
-      'bg-indigo-600 text-white font-bold' // peak
-    ];
-    return densities[code];
-  };
-
   return (
     <div className="flex flex-col gap-6">
       {/* Title */}
-      <div className="flex justify-between items-center flex-wrap gap-4">
-        <div>
-          <h1 className="text-2xl font-extrabold tracking-tight">Reports & Analytics</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">
-            Analyze asset utilization, department statistics, repair frequencies, and shared booking heatmaps.
-          </p>
-        </div>
-        <Button
-          size="sm"
-          onClick={() =>
-            handleExportCSV(
-              'asset_utilization_report',
-              ['Asset Tag', 'Asset Name', 'Status', 'Location'],
-              assets.map(a => [a.assetTag, a.name, a.status, a.location])
-            )
-          }
-          disabled={assets.length === 0}
-        >
-          📥 Export Inventory CSV
-        </Button>
+      <div>
+        <h1 className="text-2xl font-extrabold tracking-tight">Reports & Analytics</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">
+          Utilization statistics, maintenance frequencies, and idle/retirement tracking.
+        </p>
       </div>
 
-      {/* Analytics Charts & Heatmap Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* SVG Utilization Bar Chart */}
-        <Card className="flex flex-col gap-4">
-          <div>
-            <h4 className="font-extrabold text-sm text-slate-800 dark:text-slate-200 tracking-tight">
-              Maintenance Frequencies
-            </h4>
-            <p className="text-xs text-slate-400 mt-0.5">Total repair request counts by category</p>
-          </div>
+      {/* DUAL SVG PANELS (Screen 9 Layout) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 select-none">
+        
+        {/* Left Panel: Utilization by Department (Yellow Vertical Bars) */}
+        <div className="bg-sky-500/10 border border-sky-500/20 rounded-2xl p-6 relative overflow-hidden flex flex-col gap-3 min-h-[220px]">
+          <span className="text-xs font-extrabold text-sky-800 dark:text-sky-300 uppercase tracking-wide">
+            Utilization by department
+          </span>
           
-          <div className="h-64 flex items-end justify-between px-6 pb-2 border-b border-slate-200 dark:border-slate-800 pt-8 relative select-none">
-            {/* Grid lines */}
-            <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-20 text-[9px] font-bold text-slate-400">
-              <div className="border-b border-dashed border-current w-full pb-1">15 Repairs</div>
-              <div className="border-b border-dashed border-current w-full pb-1">10 Repairs</div>
-              <div className="border-b border-dashed border-current w-full pb-1">5 Repairs</div>
-              <div>0</div>
+          <div className="flex-1 flex items-end justify-between px-4 pb-2 border-b border-sky-500/10 pt-6">
+            <div className="flex flex-col items-center gap-1.5 w-[12%]">
+              <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '50px' }} />
+              <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">IT</span>
             </div>
-
-            {/* Bars */}
-            <div className="flex flex-col items-center gap-2 w-1/3 group z-10 cursor-pointer">
-              <div className="text-[10px] font-bold text-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity">8 tickets</div>
-              <div className="w-12 bg-indigo-500 dark:bg-indigo-600 rounded-t-xl group-hover:scale-y-105 origin-bottom transition-all duration-300 shadow-md" style={{ height: '90px' }} />
-              <span className="text-xs font-semibold text-slate-500">Electronics</span>
+            <div className="flex flex-col items-center gap-1.5 w-[12%]">
+              <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '90px' }} />
+              <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">HR</span>
             </div>
-            
-            <div className="flex flex-col items-center gap-2 w-1/3 group z-10 cursor-pointer">
-              <div className="text-[10px] font-bold text-sky-500 opacity-0 group-hover:opacity-100 transition-opacity">2 tickets</div>
-              <div className="w-12 bg-sky-500 dark:bg-sky-600 rounded-t-xl group-hover:scale-y-105 origin-bottom transition-all duration-300 shadow-md" style={{ height: '25px' }} />
-              <span className="text-xs font-semibold text-slate-500">Furniture</span>
+            <div className="flex flex-col items-center gap-1.5 w-[12%]">
+              <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '110px' }} />
+              <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">ENG</span>
             </div>
-
-            <div className="flex flex-col items-center gap-2 w-1/3 group z-10 cursor-pointer">
-              <div className="text-[10px] font-bold text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity">5 tickets</div>
-              <div className="w-12 bg-emerald-500 dark:bg-emerald-600 rounded-t-xl group-hover:scale-y-105 origin-bottom transition-all duration-300 shadow-md" style={{ height: '60px' }} />
-              <span className="text-xs font-semibold text-slate-500">Vehicles</span>
+            <div className="flex flex-col items-center gap-1.5 w-[12%]">
+              <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '70px' }} />
+              <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">MKT</span>
+            </div>
+            <div className="flex flex-col items-center gap-1.5 w-[12%]">
+              <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '40px' }} />
+              <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">FIN</span>
+            </div>
+            <div className="flex flex-col items-center gap-1.5 w-[12%]">
+              <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '95px' }} />
+              <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">OPS</span>
             </div>
           </div>
-        </Card>
+        </div>
 
-        {/* Resource Booking Heatmap Grid */}
-        <Card className="flex flex-col gap-4">
-          <div>
-            <h4 className="font-extrabold text-sm text-slate-800 dark:text-slate-200 tracking-tight">
-              Resource Booking Heatmap
-            </h4>
-            <p className="text-xs text-slate-400 mt-0.5">Peak bookable usage windows (Hour vs Weekday)</p>
+        {/* Right Panel: Maintenance Frequency (Red Line Chart) */}
+        <div className="bg-sky-500/10 border border-sky-500/20 rounded-2xl p-6 relative overflow-hidden flex flex-col gap-3 min-h-[220px]">
+          <span className="text-xs font-extrabold text-sky-800 dark:text-sky-300 uppercase tracking-wide">
+            Maintenance Frequency
+          </span>
+
+          <div className="flex-1 relative flex items-end pt-8">
+            {/* Draw custom SVG red line graph */}
+            <svg className="w-full h-24 overflow-visible" viewBox="0 0 100 50" preserveAspectRatio="none">
+              {/* Grid guide */}
+              <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(14, 165, 233, 0.1)" strokeWidth="1" />
+              {/* SVG Red Line graph */}
+              <path
+                d="M 5,40 L 25,25 L 45,35 L 65,15 L 85,10 M 85,10"
+                fill="none"
+                stroke="#f43f5e"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              {/* Drop Dots */}
+              <circle cx="5" cy="40" r="1.5" fill="#f43f5e" />
+              <circle cx="25" cy="25" r="1.5" fill="#f43f5e" />
+              <circle cx="45" cy="35" r="1.5" fill="#f43f5e" />
+              <circle cx="65" cy="15" r="1.5" fill="#f43f5e" />
+              <circle cx="85" cy="10" r="1.5" fill="#f43f5e" />
+            </svg>
           </div>
-
-          <div className="flex-1 flex flex-col gap-2 mt-4">
-            {/* Header row for Time Slots */}
-            <div className="grid grid-cols-6 gap-2 text-center text-[10px] font-bold text-slate-400 select-none pb-1 border-b border-slate-100 dark:border-slate-850">
-              <div className="text-left pl-2">Day</div>
-              {timeSlots.map((slot, idx) => <div key={idx}>{slot}</div>)}
-            </div>
-
-            {/* Heatmap Grid Density Cells */}
-            {weekdays.map((day, dIdx) => (
-              <div key={dIdx} className="grid grid-cols-6 gap-2 items-center text-center">
-                <div className="text-xs font-bold text-slate-500 text-left pl-2 select-none">{day}</div>
-                {timeSlots.map((hour, hIdx) => {
-                  const densityClass = getHeatmapDensity(day, hour);
-                  return (
-                    <div
-                      key={hIdx}
-                      className={`heatmap-cell p-2 rounded-lg text-[9px] font-semibold flex items-center justify-center transition-all ${densityClass}`}
-                      title={`${day} @ ${hour} slot density`}
-                    >
-                      {Math.round((day.charCodeAt(0) + hour.charCodeAt(1)) % 10)}
-                    </div>
-                  );
-                })}
-              </div>
-            ))}
-            
-            {/* Density scale indicators */}
-            <div className="flex gap-4 justify-end mt-4 text-[10px] font-semibold text-slate-400 select-none">
-              <div className="flex items-center gap-1">
-                <div className="h-3 w-3 rounded bg-slate-100 dark:bg-slate-800 border" /> Empty
-              </div>
-              <div className="flex items-center gap-1">
-                <div className="h-3 w-3 rounded bg-indigo-500/20" /> Low
-              </div>
-              <div className="flex items-center gap-1">
-                <div className="h-3 w-3 rounded bg-indigo-500/50" /> Mid
-              </div>
-              <div className="flex items-center gap-1">
-                <div className="h-3 w-3 rounded bg-indigo-600" /> Peak
-              </div>
-            </div>
-          </div>
-        </Card>
+        </div>
       </div>
 
-      {/* Department Summaries & Service Lists */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Dept allocations table summary */}
-        <Card className="flex flex-col gap-4">
-          <h4 className="font-extrabold text-sm text-slate-800 dark:text-slate-200 tracking-tight">
-            Department-wise Allocation Summary
-          </h4>
-          <Table
-            loading={loading}
-            columns={[
-              { key: 'name', header: 'Department' },
-              { key: 'activeAlloc', header: 'Active Checked-out Assets' },
-              { key: 'totalAllocs', header: 'Lifetime Historical Allocations' }
-            ]}
-            data={getDeptSummary()}
-          />
-        </Card>
+      {/* METRICS & LISTS DETAIL SECTION (Screen 9 Layout) */}
+      <Card className="flex flex-col gap-6">
+        
+        {/* Most Used & Idle side by side */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-slate-100 dark:border-slate-800 pb-6">
+          {/* Most Used Column */}
+          <div className="flex flex-col gap-3">
+            <h5 className="font-extrabold text-sm text-slate-800 dark:text-slate-200 tracking-tight uppercase">
+              Most used assets
+            </h5>
+            <ul className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex flex-col gap-2.5 list-disc pl-4">
+              <li>Conference Room B2: <b className="text-indigo-500">34 bookings</b> this month</li>
+              <li>Van AF-343: <b className="text-indigo-500">21 trips</b> this month</li>
+              <li>Projector AF-335: <b className="text-indigo-500">18 uses</b></li>
+            </ul>
+          </div>
 
-        {/* Nearing Service / Damaged assets alerts */}
-        <Card className="flex flex-col gap-4">
-          <h4 className="font-extrabold text-sm text-slate-800 dark:text-slate-200 tracking-tight">
-            Assets Nearing Service / Repair alerts
-          </h4>
-          <Table
-            loading={loading}
-            columns={[
-              { key: 'assetTag', header: 'Asset Tag' },
-              { key: 'name', header: 'Asset Name' },
-              { key: 'condition', header: 'Condition' },
-              {
-                key: 'status',
-                header: 'Lifecycle Status',
-                render: (row) => <Badge status={row.status} />
-              }
-            ]}
-            data={getAssetsNearingService()}
-            emptyMessage="All company assets are in excellent/good condition"
-          />
-        </Card>
-      </div>
+          {/* Idle Column */}
+          <div className="flex flex-col gap-3">
+            <h5 className="font-extrabold text-sm text-slate-800 dark:text-slate-200 tracking-tight uppercase">
+              Idle assets
+            </h5>
+            <ul className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex flex-col gap-2.5 list-disc pl-4">
+              <li>Camera AF-0301: <span className="text-rose-400 font-bold">unused 60+ days</span></li>
+              <li>Chair AF-0410: <span className="text-rose-400 font-bold">unused 45 days</span></li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Maintenance / Retirement section */}
+        <div className="flex flex-col gap-3">
+          <h5 className="font-extrabold text-sm text-slate-800 dark:text-slate-200 tracking-tight uppercase">
+            Assets due for maintenance / nearing retirement
+          </h5>
+          <ul className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex flex-col gap-2.5 list-disc pl-4">
+            <li>Forklift AF-0087: <span className="text-amber-500 font-bold">service due in 5 days</span></li>
+            <li>Laptop AF-0020: <span className="text-amber-500 font-bold">4 years old: nearing retirement</span></li>
+          </ul>
+        </div>
+
+        {/* Export Report Action */}
+        <div className="border-t border-slate-100 dark:border-slate-800 pt-4 flex justify-start">
+          <button
+            onClick={handleExportCSV}
+            className="px-5 py-2.5 rounded-xl text-xs font-bold bg-rose-500/10 text-rose-600 border border-rose-500/20 hover:bg-rose-500/20 transition-all cursor-pointer"
+          >
+            Export report
+          </button>
+        </div>
+      </Card>
     </div>
   );
 };

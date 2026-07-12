@@ -74,7 +74,8 @@ const DashboardLayout = () => {
     { label: 'Reports & Analytics', path: '/reports', icon: '📈', roles: ['Admin', 'Asset Manager', 'Department Head', 'Employee'] },
     { label: 'Physical Audits', path: '/audits', icon: '🔍', roles: ['Admin', 'Asset Manager'] },
     { label: 'Organization Setup', path: '/organization', icon: '⚙️', roles: ['Admin'] },
-    { label: 'System Logs', path: '/logs', icon: '📜', roles: ['Admin', 'Asset Manager'] }
+    { label: 'System Logs', path: '/logs', icon: '📜', roles: ['Admin', 'Asset Manager'] },
+    { label: 'Notifications', path: '/notifications', icon: '🔔', roles: ['Admin', 'Asset Manager', 'Department Head', 'Employee'] }
   ];
 
   const filteredNavItems = navItems.filter(item => hasRole(item.roles));

@@ -7,8 +7,7 @@ import Input from '../components/forms/Input';
 import Select from '../components/forms/Select';
 import Badge from '../components/ui/Badge';
 import Modal from '../components/modal/Modal';
-import DatePicker from '../components/forms/DatePicker';
-import Table from '../components/tables/Table';
+import Textarea from '../components/forms/Textarea';
 import api from '../services/api';
 
 const Bookings = () => {
@@ -22,11 +21,14 @@ const Bookings = () => {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // Selected scheduler date (defaults to today)
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+
   // Modals
   const [bookModalOpen, setBookModalOpen] = useState(false);
 
-  // Form states
-  const [bookDate, setBookDate] = useState('');
+  // Form states (Draft Bookings)
+  const [bookDate, setBookDate] = useState(new Date().toISOString().split('T')[0]);
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('10:00');
   const [purpose, setPurpose] = useState('');
@@ -77,7 +79,6 @@ const Bookings = () => {
       return;
     }
 
-    // Parse into Date ISO strings
     const startISO = `${bookDate}T${startTime}:00`;
     const endISO = `${bookDate}T${endTime}:00`;
 
@@ -93,14 +94,9 @@ const Bookings = () => {
       setBookModalOpen(false);
       
       // Reset form
-      setBookDate('');
-      setStartTime('09:00');
-      setEndTime('10:00');
       setPurpose('');
-
       fetchBookings();
     } catch (err) {
-      // Overlap conflicts caught here
       showNotification(err.message, 'error');
     }
   };
@@ -120,159 +116,237 @@ const Bookings = () => {
     return res ? res.name : 'Shared Resource';
   };
 
+  // Convert time to standard 12hr format (e.g. 13:00 -> 1:00 PM)
+  const formatHourLabel = (hourString) => {
+    const hour = parseInt(hourString.split(':')[0]);
+    if (hour === 12) return '12:00';
+    if (hour > 12) return `${hour - 12}:00`;
+    return `${hour}:00`;
+  };
+
+  // Generate hourly schedule slots (9:00 AM to 5:00 PM)
+  const hoursList = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+
+  // Check if a specific hour slot is booked on selectedDate
+  const getBookingForHour = (hour) => {
+    return bookings.find(b => {
+      if (b.status === 'Cancelled') return false;
+      const bStart = new Date(b.startTime);
+      const bEnd = new Date(b.endTime);
+      const bDateStr = bStart.toISOString().split('T')[0];
+      
+      if (bDateStr !== selectedDate) return false;
+
+      // Extract hours
+      const targetHour = parseInt(hour.split(':')[0]);
+      const startHour = bStart.getHours();
+      const endHour = bEnd.getHours();
+      
+      return targetHour >= startHour && targetHour < endHour;
+    });
+  };
+
+  // Check if there is an overlap conflict with the user's active form inputs
+  const checkConflict = () => {
+    if (bookDate !== selectedDate) return false;
+    
+    // Parse form draft values
+    const draftStart = parseInt(startTime.split(':')[0]);
+    const draftEnd = parseInt(endTime.split(':')[0]);
+    
+    // Find any booking that clashes with these hours on this date
+    return bookings.some(b => {
+      if (b.status === 'Cancelled') return false;
+      const bStart = new Date(b.startTime);
+      const bEnd = new Date(b.endTime);
+      const bDateStr = bStart.toISOString().split('T')[0];
+      
+      if (bDateStr !== bookDate) return false;
+      
+      const bStartHour = bStart.getHours();
+      const bEndHour = bEnd.getHours();
+      
+      // Overlap formula
+      return draftStart < bEndHour && draftEnd > bStartHour;
+    });
+  };
+
+  const isConflicting = checkConflict();
+
   return (
     <div className="flex flex-col gap-6">
-      {/* Title section */}
+      {/* Title */}
       <div className="flex justify-between items-center flex-wrap gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold tracking-tight">Resource Booking Scheduler</h1>
+          <h1 className="text-2xl font-extrabold tracking-tight">Resource Booking</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">
-            Book company vehicles, rooms, and devices by time slots with zero overlap conflicts.
+            Book shared assets, rooms, and vehicles. Overlapping times are strictly validated.
           </p>
         </div>
         <Button size="sm" onClick={() => setBookModalOpen(true)} disabled={resources.length === 0}>
-          📅 Reserve Resource Slot
+          📅 Book a slot
         </Button>
       </div>
 
-      {/* Select Resource Panel */}
-      <Card className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-        <div className="flex items-center gap-3 w-full sm:w-auto">
-          <span className="text-xs font-bold uppercase text-slate-400 tracking-wider">Active Resource:</span>
-          <Select
-            value={selectedResourceId}
-            onChange={e => setSelectedResourceId(e.target.value)}
-            options={resources.map(r => ({ value: r._id, label: `${r.name} (${r.location})` }))}
-            placeholder={resources.length === 0 ? 'No shared resources registered' : null}
-            className="flex-1 sm:w-64 py-1.5"
-          />
+      {/* Select Resource & Date Controls */}
+      <Card className="flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold uppercase text-slate-400">Resource:</span>
+            <Select
+              value={selectedResourceId}
+              onChange={e => setSelectedResourceId(e.target.value)}
+              options={resources.map(r => ({ value: r._id, label: `${r.name} (${r.location})` }))}
+              placeholder={resources.length === 0 ? 'No shared assets found' : null}
+              className="w-56 py-1"
+            />
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold uppercase text-slate-400">Date:</span>
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={e => {
+                setSelectedDate(e.target.value);
+                setBookDate(e.target.value); // Sync form date
+              }}
+              className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 text-xs font-semibold text-slate-800 dark:text-slate-200 outline-none"
+            />
+          </div>
         </div>
+
         {selectedResourceId && (
-          <div className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
+          <div className="text-xs font-extrabold text-indigo-500 bg-indigo-500/5 px-3 py-1.5 rounded-lg border border-indigo-500/10">
             🟢 Active Bookable Resource: {getResourceName(selectedResourceId)}
           </div>
         )}
       </Card>
 
-      {/* Schedule Calendar Display */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        {/* Left Column: Custom Grid Calendar View */}
+      {/* TIMELINE SCHEDULER MATRIX (Screen 6 Layout) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start select-none">
+        {/* Hourly timeline sheet */}
         <div className="lg:col-span-2">
-          <Card>
-            <div className="flex justify-between items-center mb-6">
+          <Card className="flex flex-col gap-4">
+            <div className="border-b border-slate-100 dark:border-slate-850 pb-2">
               <h4 className="font-extrabold text-sm text-slate-800 dark:text-slate-200 tracking-tight">
-                📅 Booking Calendar Slots
+                Schedule Slots Matrix - {new Date(selectedDate).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })}
               </h4>
-              <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500">
-                Weekly View
-              </span>
             </div>
 
-            {/* Custom Interactive Weekly grid */}
-            <div className="flex flex-col border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white/20 dark:bg-slate-900/10">
-              <div className="grid grid-cols-7 bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 text-center py-3 text-xs font-bold text-slate-500 select-none">
-                <div>Sun</div>
-                <div>Mon</div>
-                <div>Tue</div>
-                <div>Wed</div>
-                <div>Thu</div>
-                <div>Fri</div>
-                <div>Sat</div>
+            {loading ? (
+              <div className="h-60 flex items-center justify-center">
+                <div className="h-8 w-8 rounded-full border-2 border-indigo-200 border-t-indigo-600 animate-spin" />
               </div>
-              
-              {/* Simply display active events scheduled in list format since grid list is cleaner */}
-              <div className="p-4 flex flex-col gap-3 min-h-60 overflow-y-auto max-h-[400px]">
-                {loading ? (
-                  <div className="h-40 flex items-center justify-center">
-                    <div className="h-6 w-6 rounded-full border-2 border-indigo-200/40 border-t-indigo-600 animate-spin" />
-                  </div>
-                ) : bookings.filter(b => b.status !== 'Cancelled').length === 0 ? (
-                  <div className="text-center py-16 text-xs font-semibold text-slate-400">
-                    No active bookings for this resource. Be the first to reserve a slot!
-                  </div>
-                ) : (
-                  bookings
-                    .filter(b => b.status !== 'Cancelled')
-                    .sort((a, b) => new Date(a.startTime) - new Date(b.startTime))
-                    .map((booking) => {
-                      const start = new Date(booking.startTime);
-                      const end = new Date(booking.endTime);
-                      const emp = employees.find(e => e._id === booking.bookedBy);
-                      const isOwner = booking.bookedBy === user?._id;
+            ) : (
+              <div className="flex flex-col mt-2">
+                {hoursList.map((hour) => {
+                  const activeBooking = getBookingForHour(hour);
+                  
+                  // Check if the user's active inputs draft overlaps with this specific hour
+                  const draftHour = parseInt(hour.split(':')[0]);
+                  const draftStart = parseInt(startTime.split(':')[0]);
+                  const draftEnd = parseInt(endTime.split(':')[0]);
+                  const isDraftOverlappingHour = draftHour >= draftStart && draftHour < draftEnd;
 
-                      return (
-                        <div
-                          key={booking._id}
-                          className={`p-4 rounded-xl border flex justify-between items-start flex-wrap gap-2 transition-all ${
-                            isOwner
-                              ? 'border-indigo-200 bg-indigo-500/5 dark:bg-indigo-950/10'
-                              : 'border-slate-200 dark:border-slate-800 bg-slate-50/20'
-                          }`}
-                        >
-                          <div>
-                            <span className="font-bold text-xs text-indigo-600 dark:text-indigo-400 block uppercase tracking-wide">
-                              {start.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
+                  return (
+                    <div
+                      key={hour}
+                      className="grid grid-cols-6 border-b border-slate-100 dark:border-slate-850 min-h-[64px] items-center"
+                    >
+                      {/* Hour Indicator */}
+                      <div className="col-span-1 text-xs font-bold text-slate-400">
+                        {formatHourLabel(hour)}
+                      </div>
+
+                      {/* Timeline Block area */}
+                      <div className="col-span-5 relative py-2 pl-4">
+                        {activeBooking ? (
+                          // Blue glassmorphic booked container
+                          <div className="bg-sky-500/10 border border-sky-500/20 text-sky-800 dark:text-sky-300 px-4 py-2.5 rounded-xl text-xs font-bold flex justify-between items-center shadow-sm">
+                            <span>
+                              Booked - {activeBooking.purpose} ({new Date(activeBooking.startTime).getHours()}-{new Date(activeBooking.endTime).getHours()})
                             </span>
-                            <h6 className="font-bold text-sm text-slate-800 dark:text-slate-100 mt-1">
-                              {start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -{' '}
-                              {end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </h6>
-                            <span className="text-[10px] text-slate-400 block mt-1">
-                              Booked by: <b>{emp ? emp.name : 'Unknown Employee'}</b> {isOwner ? '(You)' : ''}
-                            </span>
-                            {booking.purpose && (
-                              <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 font-medium italic">
-                                "{booking.purpose}"
-                              </p>
-                            )}
-                          </div>
-                          <div className="flex flex-col gap-2 items-end">
-                            <Badge status={booking.status} />
-                            {(isOwner || ['Admin', 'Asset Manager'].includes(user?.role)) && (
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleCancelBooking(booking._id)}
-                                className="text-xs py-1"
+                            
+                            {(activeBooking.bookedBy === user?._id || ['Admin', 'Asset Manager'].includes(user?.role)) && (
+                              <button
+                                onClick={() => handleCancelBooking(activeBooking._id)}
+                                className="text-[10px] text-sky-600 hover:text-sky-400 font-extrabold focus:outline-none"
                               >
                                 Cancel
-                              </Button>
+                              </button>
                             )}
                           </div>
-                        </div>
-                      );
-                    })
-                )}
+                        ) : isDraftOverlappingHour && isConflicting ? (
+                          // Red-dotted clashing preview block
+                          <div className="bg-rose-500/5 border border-dashed border-rose-500/50 text-rose-500 px-4 py-2.5 rounded-xl text-xs font-bold flex flex-col gap-0.5 animate-pulse">
+                            <span>Requested {startTime} to {endTime} - conflict</span>
+                            <span className="text-[10px] font-medium opacity-80">slot is unavailable</span>
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            </div>
+            )}
           </Card>
         </div>
 
-        {/* Right Column: Reservation Rules / Info */}
-        <Card>
-          <h4 className="font-bold text-sm text-slate-800 dark:text-slate-200 tracking-tight mb-4 uppercase">
-            ⚠️ Reservation Rules
+        {/* Right side rules/forms */}
+        <Card className="flex flex-col gap-4">
+          <h4 className="font-extrabold text-sm text-slate-800 dark:text-slate-200 tracking-tight uppercase">
+            ⚠️ Conflict Warning System
           </h4>
-          <ul className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex flex-col gap-4 list-disc pl-4">
-            <li>Only assets flagged with <b>Shared</b> status can be reserved.</li>
-            <li>Booking slots are validated against clashing times on submission. Any overlaps are automatically blocked by the system.</li>
-            <li>Users can cancel or modify bookings they created at any time.</li>
-            <li>Managers have authority to cancel any reservation.</li>
-          </ul>
+          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-semibold">
+            To view clashing preview alerts, adjust the **Booking Date** to match the schedule date, and enter booking hours. If they clash with active slots, a red dotted border warning will automatically trigger on the scheduler list.
+          </p>
+
+          <div className="border-t border-slate-100 dark:border-slate-800 pt-4 flex flex-col gap-3">
+            <DatePicker
+              label="Booking Date"
+              value={bookDate}
+              onChange={e => {
+                setBookDate(e.target.value);
+                setSelectedDate(e.target.value); // Sync calendar view date
+              }}
+              required
+            />
+            <div className="grid grid-cols-2 gap-3">
+              <Input
+                label="Start Time"
+                type="time"
+                value={startTime}
+                onChange={e => setStartTime(e.target.value)}
+                required
+              />
+              <Input
+                label="End Time"
+                type="time"
+                value={endTime}
+                onChange={e => setEndTime(e.target.value)}
+                required
+              />
+            </div>
+            {isConflicting && (
+              <div className="text-xs font-bold text-rose-500 bg-rose-500/10 p-3 rounded-xl border border-rose-500/20 text-center">
+                🚫 Overlap detected! Choose another slot.
+              </div>
+            )}
+          </div>
         </Card>
       </div>
 
-      {/* ========================================== */}
       {/* BOOKING SCHEDULER MODAL */}
-      {/* ========================================== */}
       <Modal isOpen={bookModalOpen} onClose={() => setBookModalOpen(false)} title={`Reserve: ${getResourceName(selectedResourceId)}`}>
         <form onSubmit={handleBookingSubmit} className="flex flex-col gap-4">
-          <DatePicker
+          <Input
             label="Booking Date"
+            type="date"
             value={bookDate}
             onChange={e => setBookDate(e.target.value)}
             required
-            minDate={new Date().toISOString().split('T')[0]} // block past dates
+            min={new Date().toISOString().split('T')[0]}
           />
 
           <div className="grid grid-cols-2 gap-3">
@@ -300,7 +374,9 @@ const Bookings = () => {
             required
           />
 
-          <Button type="submit" variant="primary" className="mt-2">Confirm Reservation</Button>
+          <Button type="submit" variant="primary" className="mt-2" disabled={isConflicting}>
+            Confirm Reservation
+          </Button>
         </form>
       </Modal>
     </div>
@@ -308,3 +384,4 @@ const Bookings = () => {
 };
 
 export default Bookings;
+export { Bookings };

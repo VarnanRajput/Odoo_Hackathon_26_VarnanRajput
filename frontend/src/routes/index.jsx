@@ -20,6 +20,7 @@ import Reports from '../pages/Reports';
 import Unauthorized from '../pages/Unauthorized';
 import NotFound from '../pages/NotFound';
 import Home from '../pages/Home';
+import NotificationsPage from '../pages/Notifications';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -134,6 +135,8 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
+        
+        <Route path="notifications" element={<NotificationsPage />} />
       </Route>
 
       {/* Fallback Error Routes */}

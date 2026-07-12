@@ -6,7 +6,6 @@ import Button from '../components/ui/Button';
 import Input from '../components/forms/Input';
 import Select from '../components/forms/Select';
 import Badge from '../components/ui/Badge';
-import Table from '../components/tables/Table';
 import Modal from '../components/modal/Modal';
 import FileUpload from '../components/forms/FileUpload';
 import Textarea from '../components/forms/Textarea';
@@ -47,9 +46,9 @@ const Maintenance = () => {
         api.get('/assets'),
         api.get('/employees')
       ]);
-      setTickets(ticketsRes.data.data);
-      setAssets(assetsRes.data.data);
-      setEmployees(empsRes.data.data);
+      setTickets(ticketsRes.data.data || []);
+      setAssets(assetsRes.data.data || []);
+      setEmployees(empsRes.data.data || []);
     } catch (err) {
       showNotification(err.message, 'error');
     } finally {
@@ -111,26 +110,55 @@ const Maintenance = () => {
     setEditModalOpen(true);
   };
 
-  const getAssetName = (id) => {
+  const getAssetTag = (id) => {
     const asset = assets.find(a => a._id === id);
-    return asset ? `${asset.name} (${asset.assetTag})` : 'Unknown Asset';
+    return asset ? asset.assetTag : 'AF-XXXX';
   };
 
-  const getEmployeeName = (id) => {
-    const emp = employees.find(e => e._id === id);
-    return emp ? emp.name : 'Reporter';
+  const getAssetName = (id) => {
+    const asset = assets.find(a => a._id === id);
+    return asset ? asset.name : 'Unknown Asset';
   };
 
   const isManager = hasRole(['Admin', 'Asset Manager']);
+
+  // Kanban Stage Column Definitions
+  const columns = [
+    {
+      title: 'Pending',
+      filter: (t) => t.status === 'Pending',
+      borderColor: 'border-amber-500/20'
+    },
+    {
+      title: 'Approved',
+      filter: (t) => t.status === 'Approved' && !t.technician,
+      borderColor: 'border-indigo-500/20'
+    },
+    {
+      title: 'Technician assigned',
+      filter: (t) => (t.status === 'Approved' || t.status === 'In Progress') && t.technician,
+      borderColor: 'border-sky-500/20'
+    },
+    {
+      title: 'in progress',
+      filter: (t) => t.status === 'In Progress' && !t.technician,
+      borderColor: 'border-purple-500/20'
+    },
+    {
+      title: 'Resolved',
+      filter: (t) => t.status === 'Resolved',
+      borderColor: 'border-emerald-500/20'
+    }
+  ];
 
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
       <div className="flex justify-between items-center flex-wrap gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold tracking-tight">Maintenance Tickets</h1>
+          <h1 className="text-2xl font-extrabold tracking-tight">Maintenance requests</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">
-            Report hardware faults and manage diagnostic/repair approval workflows.
+            Manage repair workflows and tracking diagnostics stages in kanban pipelines.
           </p>
         </div>
         <Button size="sm" onClick={() => setRaiseModalOpen(true)}>
@@ -138,57 +166,75 @@ const Maintenance = () => {
         </Button>
       </div>
 
-      {/* Ticket List Table */}
-      <Card>
-        <div className="flex flex-col gap-4">
-          <h3 className="font-bold text-base">Active repair requests</h3>
-          
-          <Table
-            loading={loading}
-            columns={[
-              {
-                key: 'asset',
-                header: 'Asset Name/Tag',
-                render: (row) => getAssetName(row.asset)
-              },
-              {
-                key: 'reportedBy',
-                header: 'Reported By',
-                render: (row) => getEmployeeName(row.reportedBy)
-              },
-              {
-                key: 'priority',
-                header: 'Priority',
-                render: (row) => <Badge status={row.priority} />
-              },
-              {
-                key: 'status',
-                header: 'Workflow Stage',
-                render: (row) => <Badge status={row.status} />
-              },
-              {
-                key: 'actions',
-                header: 'Actions',
-                render: (row) => {
-                  if (isManager) {
-                    return (
-                      <Button variant="outline" size="sm" onClick={() => openManage(row)}>
-                        Manage Ticket
-                      </Button>
-                    );
-                  }
-                  return <span className="opacity-40 text-xs">View Only</span>;
-                }
-              }
-            ]}
-            data={tickets}
-          />
-        </div>
-      </Card>
+      {/* KANBAN BOARD CONTAINER */}
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 items-start select-none">
+        {columns.map((col, idx) => {
+          const colTickets = tickets.filter(col.filter);
+          return (
+            <div
+              key={idx}
+              className={`flex flex-col gap-3 p-3 rounded-2xl border bg-slate-50/50 dark:bg-slate-900/40 min-h-[450px] ${col.borderColor}`}
+            >
+              {/* Header column title */}
+              <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-2">
+                <span className="text-xs font-extrabold text-slate-800 dark:text-slate-200 tracking-tight uppercase">
+                  {col.title}
+                </span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-500">
+                  {colTickets.length}
+                </span>
+              </div>
 
-      {/* ========================================== */}
+              {/* Tickets cards list */}
+              <div className="flex flex-col gap-2 overflow-y-auto max-h-[500px] pr-1">
+                {colTickets.map((t) => {
+                  const isResolved = t.status === 'Resolved';
+                  return (
+                    <div
+                      key={t._id}
+                      onClick={() => isManager && openManage(t)}
+                      className={`p-4 rounded-xl border flex flex-col gap-2 transition-all cursor-pointer ${
+                        isResolved
+                          ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-800 dark:text-emerald-300'
+                          : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-indigo-500/40 shadow-sm'
+                      }`}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-extrabold tracking-wider bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded">
+                          {getAssetTag(t.asset)}
+                        </span>
+                        <Badge status={t.priority} />
+                      </div>
+                      
+                      <h6 className="font-extrabold text-xs tracking-tight line-clamp-1">
+                        {getAssetName(t.asset)}
+                      </h6>
+                      
+                      <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400 line-clamp-2">
+                        {t.issueDescription}
+                      </p>
+
+                      {t.technician && (
+                        <div className="border-t border-dashed border-slate-100 dark:border-slate-800 pt-2 flex items-center justify-between text-[9px] font-bold text-indigo-500">
+                          <span>👤 tech: {t.technician}</span>
+                        </div>
+                      )}
+
+                      {isResolved && t.updatedAt && (
+                        <div className="text-[9px] font-bold text-emerald-600 border-t border-dashed border-emerald-500/10 pt-2">
+                          ✓ resolved {new Date(t.updatedAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
       {/* RAISE REPAIR MODAL */}
-      {/* ========================================== */}
       <Modal isOpen={raiseModalOpen} onClose={() => setRaiseModalOpen(false)} title="Raise Repair Ticket" size="lg">
         <form onSubmit={handleRaiseSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="flex flex-col gap-4">
@@ -230,15 +276,13 @@ const Maintenance = () => {
         </form>
       </Modal>
 
-      {/* ========================================== */}
       {/* MANAGE TICKET WORKFLOW MODAL */}
-      {/* ========================================== */}
       <Modal isOpen={editModalOpen} onClose={() => setEditModalOpen(false)} title={`Manage Ticket: ${selectedTicket ? selectedTicket._id : ''}`} size="md">
         {selectedTicket && (
           <form onSubmit={handleManageSubmit} className="flex flex-col gap-4">
             <div className="border border-slate-100 dark:border-slate-800 p-4 rounded-2xl flex flex-col gap-2 bg-slate-50/50 dark:bg-slate-900/10">
               <span className="text-xs font-bold text-slate-400">TICKET DETAILED SPEC:</span>
-              <h5 className="font-bold text-sm">{getAssetName(selectedTicket.asset)}</h5>
+              <h5 className="font-bold text-sm">{getAssetName(selectedTicket.asset)} ({getAssetTag(selectedTicket.asset)})</h5>
               <p className="text-xs text-slate-500 mt-1 italic">"{selectedTicket.issueDescription}"</p>
               
               {selectedTicket.photo && (
@@ -250,7 +294,7 @@ const Maintenance = () => {
               label="Update Workflow Status"
               value={manageStatus}
               onChange={e => setManageStatus(e.target.value)}
-              options={['Approved', 'Rejected', 'In Progress', 'Resolved']}
+              options={['Pending', 'Approved', 'Rejected', 'In Progress', 'Resolved']}
               placeholder={null}
               required
             />
@@ -278,3 +322,4 @@ const Maintenance = () => {
 };
 
 export default Maintenance;
+export { Maintenance };
