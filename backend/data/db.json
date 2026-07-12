@@ -1,83 +1,91 @@
 {
   "users": [
     {
-      "_id": "82azgismrhmbqxf",
+      "_id": "andx7nkmrhnkw0q",
       "name": "System Admin",
       "email": "admin@assetflow.com",
-      "password": "$2b$10$QXoRyXWG2fZm0ZEPmYgQDe5IPaOqCPQC3X0jnX3lEl0ni/zapekWC",
+      "password": "$2b$10$TCg2rE22ZqGNyoe4tb9kv.7gzcSgWjLCgy6oGThl6v.mossQTnXxa",
       "role": "Admin",
       "status": "Active",
-      "createdAt": "2026-07-12T09:55:57.843Z",
-      "updatedAt": "2026-07-12T09:55:57.844Z"
+      "createdAt": "2026-07-12T10:31:03.962Z",
+      "updatedAt": "2026-07-12T10:31:03.963Z",
+      "timestamp": "2026-07-12T10:31:03.963Z"
     },
     {
-      "_id": "mzr07kfmrhmbqxj",
+      "_id": "texxpe0mrhnkw0u",
       "name": "Priya Sharma",
       "email": "priya@assetflow.com",
-      "password": "$2b$10$QXoRyXWG2fZm0ZEPmYgQDe6cqgzoSHEtTMWdjaSuNJbuLvCB2kIoe",
+      "password": "$2b$10$TCg2rE22ZqGNyoe4tb9kv.29wAXWqIqKd59UwUuxxIDcTlRYZoOg2",
       "role": "Asset Manager",
       "status": "Active",
-      "createdAt": "2026-07-12T09:55:57.847Z",
-      "updatedAt": "2026-07-12T09:55:57.872Z",
-      "department": "527kcz7mrhmbqxz"
+      "createdAt": "2026-07-12T10:31:03.966Z",
+      "updatedAt": "2026-07-12T10:31:03.999Z",
+      "timestamp": "2026-07-12T10:31:03.966Z",
+      "department": "nqo885tmrhnkw1i"
     },
     {
-      "_id": "a9lntmdmrhmbqxm",
+      "_id": "pgxcj8lmrhnkw0y",
       "name": "John Doe",
       "email": "john@assetflow.com",
-      "password": "$2b$10$QXoRyXWG2fZm0ZEPmYgQDe6cqgzoSHEtTMWdjaSuNJbuLvCB2kIoe",
+      "password": "$2b$10$TCg2rE22ZqGNyoe4tb9kv.29wAXWqIqKd59UwUuxxIDcTlRYZoOg2",
       "role": "Employee",
       "status": "Active",
-      "createdAt": "2026-07-12T09:55:57.850Z",
-      "updatedAt": "2026-07-12T09:55:57.869Z",
-      "department": "xjbvdp9mrhmbqy2"
+      "createdAt": "2026-07-12T10:31:03.970Z",
+      "updatedAt": "2026-07-12T10:31:03.996Z",
+      "timestamp": "2026-07-12T10:31:03.970Z",
+      "department": "ihtatnkmrhnkw1l"
     },
     {
-      "_id": "apwpto2mrhmbqxo",
+      "_id": "fyv3if8mrhnkw13",
       "name": "Raj Patel",
       "email": "raj@assetflow.com",
-      "password": "$2b$10$QXoRyXWG2fZm0ZEPmYgQDe6cqgzoSHEtTMWdjaSuNJbuLvCB2kIoe",
+      "password": "$2b$10$TCg2rE22ZqGNyoe4tb9kv.29wAXWqIqKd59UwUuxxIDcTlRYZoOg2",
       "role": "Department Head",
       "status": "Active",
-      "createdAt": "2026-07-12T09:55:57.852Z",
-      "updatedAt": "2026-07-12T09:55:57.875Z",
-      "department": "27rk7cnmrhmbqxs"
+      "createdAt": "2026-07-12T10:31:03.975Z",
+      "updatedAt": "2026-07-12T10:31:04.001Z",
+      "timestamp": "2026-07-12T10:31:03.976Z",
+      "department": "sxfc37gmrhnkw17"
     }
   ],
   "departments": [
     {
-      "_id": "27rk7cnmrhmbqxs",
+      "_id": "sxfc37gmrhnkw17",
       "name": "Information Technology",
-      "manager": "apwpto2mrhmbqxo",
+      "manager": "fyv3if8mrhnkw13",
       "status": "Active",
-      "createdAt": "2026-07-12T09:55:57.856Z",
-      "updatedAt": "2026-07-12T09:55:57.856Z"
+      "createdAt": "2026-07-12T10:31:03.979Z",
+      "updatedAt": "2026-07-12T10:31:03.979Z",
+      "timestamp": "2026-07-12T10:31:03.979Z"
     },
     {
-      "_id": "8ej8470mrhmbqxw",
+      "_id": "rznwtsmmrhnkw1d",
       "name": "Human Resources",
       "status": "Active",
-      "createdAt": "2026-07-12T09:55:57.860Z",
-      "updatedAt": "2026-07-12T09:55:57.860Z"
+      "createdAt": "2026-07-12T10:31:03.985Z",
+      "updatedAt": "2026-07-12T10:31:03.985Z",
+      "timestamp": "2026-07-12T10:31:03.985Z"
     },
     {
-      "_id": "527kcz7mrhmbqxz",
+      "_id": "nqo885tmrhnkw1i",
       "name": "Operations",
       "status": "Active",
-      "createdAt": "2026-07-12T09:55:57.863Z",
-      "updatedAt": "2026-07-12T09:55:57.863Z"
+      "createdAt": "2026-07-12T10:31:03.990Z",
+      "updatedAt": "2026-07-12T10:31:03.990Z",
+      "timestamp": "2026-07-12T10:31:03.990Z"
     },
     {
-      "_id": "xjbvdp9mrhmbqy2",
+      "_id": "ihtatnkmrhnkw1l",
       "name": "Engineering dept",
       "status": "Active",
-      "createdAt": "2026-07-12T09:55:57.866Z",
-      "updatedAt": "2026-07-12T09:55:57.866Z"
+      "createdAt": "2026-07-12T10:31:03.993Z",
+      "updatedAt": "2026-07-12T10:31:03.993Z",
+      "timestamp": "2026-07-12T10:31:03.993Z"
     }
   ],
   "categories": [
     {
-      "_id": "pzl29grmrhmbqye",
+      "_id": "095mm83mrhnkw1w",
       "name": "Electronics",
       "fields": [
         {
@@ -91,11 +99,12 @@
           "label": "Manufacturer"
         }
       ],
-      "createdAt": "2026-07-12T09:55:57.878Z",
-      "updatedAt": "2026-07-12T09:55:57.878Z"
+      "createdAt": "2026-07-12T10:31:04.004Z",
+      "updatedAt": "2026-07-12T10:31:04.004Z",
+      "timestamp": "2026-07-12T10:31:04.004Z"
     },
     {
-      "_id": "39er9tbmrhmbqyg",
+      "_id": "w1qcx3kmrhnkw21",
       "name": "Furniture",
       "fields": [
         {
@@ -104,11 +113,12 @@
           "label": "Material type"
         }
       ],
-      "createdAt": "2026-07-12T09:55:57.880Z",
-      "updatedAt": "2026-07-12T09:55:57.880Z"
+      "createdAt": "2026-07-12T10:31:04.009Z",
+      "updatedAt": "2026-07-12T10:31:04.009Z",
+      "timestamp": "2026-07-12T10:31:04.009Z"
     },
     {
-      "_id": "ag4ed8vmrhmbqyk",
+      "_id": "vgj9wnwmrhnkw24",
       "name": "Vehicles",
       "fields": [
         {
@@ -122,15 +132,16 @@
           "label": "Insurance Expiry Date"
         }
       ],
-      "createdAt": "2026-07-12T09:55:57.884Z",
-      "updatedAt": "2026-07-12T09:55:57.884Z"
+      "createdAt": "2026-07-12T10:31:04.012Z",
+      "updatedAt": "2026-07-12T10:31:04.012Z",
+      "timestamp": "2026-07-12T10:31:04.012Z"
     }
   ],
   "assets": [
     {
-      "_id": "br2qfm6mrhmbqyo",
+      "_id": "b8dol15mrhnkw27",
       "name": "Dell laptop",
-      "category": "pzl29grmrhmbqye",
+      "category": "095mm83mrhnkw1w",
       "assetTag": "AF-003",
       "serialNumber": "DELL-E12-X89",
       "acquisitionDate": "2025-01-15T00:00:00.000Z",
@@ -139,13 +150,14 @@
       "location": "Desk E12",
       "shared": false,
       "status": "Available",
-      "createdAt": "2026-07-12T09:55:57.888Z",
-      "updatedAt": "2026-07-12T09:55:57.888Z"
+      "createdAt": "2026-07-12T10:31:04.015Z",
+      "updatedAt": "2026-07-12T10:31:04.015Z",
+      "timestamp": "2026-07-12T10:31:04.015Z"
     },
     {
-      "_id": "k4n3jp5mrhmbqyw",
+      "_id": "sd1hyermrhnkw2c",
       "name": "Office chair",
-      "category": "39er9tbmrhmbqyg",
+      "category": "w1qcx3kmrhnkw21",
       "assetTag": "AF-9921",
       "serialNumber": "CHAIR-GESTURE-E14",
       "acquisitionDate": "2025-06-10T00:00:00.000Z",
@@ -153,29 +165,31 @@
       "condition": "Good",
       "location": "Desk E14",
       "shared": false,
-      "status": "Lost",
-      "createdAt": "2026-07-12T09:55:57.896Z",
-      "updatedAt": "2026-07-12T10:14:06.941Z"
+      "status": "Available",
+      "createdAt": "2026-07-12T10:31:04.020Z",
+      "updatedAt": "2026-07-12T10:31:04.020Z",
+      "timestamp": "2026-07-12T10:31:04.020Z"
     },
     {
-      "_id": "bvykv9lmrhmbqz0",
+      "_id": "scapnrpmrhnkw2h",
       "name": "Monitor",
-      "category": "pzl29grmrhmbqye",
+      "category": "095mm83mrhnkw1w",
       "assetTag": "AF-9838",
       "serialNumber": "MONITOR-DELL-E15",
       "acquisitionDate": "2025-11-20T00:00:00.000Z",
       "acquisitionCost": 350,
-      "condition": "Damaged",
+      "condition": "Good",
       "location": "Desk E15",
       "shared": false,
       "status": "Available",
-      "createdAt": "2026-07-12T09:55:57.900Z",
-      "updatedAt": "2026-07-12T10:14:06.967Z"
+      "createdAt": "2026-07-12T10:31:04.025Z",
+      "updatedAt": "2026-07-12T10:31:04.025Z",
+      "timestamp": "2026-07-12T10:31:04.025Z"
     },
     {
-      "_id": "mw3ep3umrhmbqz3",
+      "_id": "kjhr939mrhnkw2k",
       "name": "Projector bulb",
-      "category": "pzl29grmrhmbqye",
+      "category": "095mm83mrhnkw1w",
       "assetTag": "AF-0062",
       "serialNumber": "PROJ-BULB-0062",
       "acquisitionDate": "2026-02-01T00:00:00.000Z",
@@ -184,13 +198,14 @@
       "location": "Conference Room Alpha",
       "shared": false,
       "status": "Under Maintenance",
-      "createdAt": "2026-07-12T09:55:57.903Z",
-      "updatedAt": "2026-07-12T09:55:57.903Z"
+      "createdAt": "2026-07-12T10:31:04.028Z",
+      "updatedAt": "2026-07-12T10:31:04.028Z",
+      "timestamp": "2026-07-12T10:31:04.028Z"
     },
     {
-      "_id": "qdxk7c4mrhmbqz7",
+      "_id": "lh4n21tmrhnkw2n",
       "name": "ac unit",
-      "category": "pzl29grmrhmbqye",
+      "category": "095mm83mrhnkw1w",
       "assetTag": "AF-003",
       "serialNumber": "AC-VOLTAS-COMPRESSOR",
       "acquisitionDate": "2024-03-01T00:00:00.000Z",
@@ -199,13 +214,14 @@
       "location": "Main Hallway Office",
       "shared": false,
       "status": "Available",
-      "createdAt": "2026-07-12T09:55:57.907Z",
-      "updatedAt": "2026-07-12T09:55:57.907Z"
+      "createdAt": "2026-07-12T10:31:04.031Z",
+      "updatedAt": "2026-07-12T10:31:04.031Z",
+      "timestamp": "2026-07-12T10:31:04.031Z"
     },
     {
-      "_id": "mq2ncg8mrhmbqza",
+      "_id": "c0dwi7smrhnkw2q",
       "name": "forklift",
-      "category": "ag4ed8vmrhmbqyk",
+      "category": "vgj9wnwmrhnkw24",
       "assetTag": "AF-0078",
       "serialNumber": "TOYOTA-FORKLIFT-0078",
       "acquisitionDate": "2023-08-10T00:00:00.000Z",
@@ -214,13 +230,14 @@
       "location": "Warehouse Gate 4",
       "shared": false,
       "status": "Under Maintenance",
-      "createdAt": "2026-07-12T09:55:57.910Z",
-      "updatedAt": "2026-07-12T09:55:57.910Z"
+      "createdAt": "2026-07-12T10:31:04.034Z",
+      "updatedAt": "2026-07-12T10:31:04.034Z",
+      "timestamp": "2026-07-12T10:31:04.034Z"
     },
     {
-      "_id": "7o6exkemrhmbqzd",
+      "_id": "umsw7osmrhnkw2u",
       "name": "Printer Jam",
-      "category": "pzl29grmrhmbqye",
+      "category": "095mm83mrhnkw1w",
       "assetTag": "AF-897",
       "serialNumber": "HP-LASERJET-897",
       "acquisitionDate": "2025-05-15T00:00:00.000Z",
@@ -229,13 +246,14 @@
       "location": "Print Room 2",
       "shared": false,
       "status": "Under Maintenance",
-      "createdAt": "2026-07-12T09:55:57.913Z",
-      "updatedAt": "2026-07-12T09:55:57.913Z"
+      "createdAt": "2026-07-12T10:31:04.038Z",
+      "updatedAt": "2026-07-12T10:31:04.038Z",
+      "timestamp": "2026-07-12T10:31:04.038Z"
     },
     {
-      "_id": "qs72tqdmrhmbqzf",
+      "_id": "r4lxlhvmrhnkw2y",
       "name": "Chair repair",
-      "category": "39er9tbmrhmbqyg",
+      "category": "w1qcx3kmrhnkw21",
       "assetTag": "AF-873",
       "serialNumber": "CHAIR-RECEPTION-873",
       "acquisitionDate": "2024-12-01T00:00:00.000Z",
@@ -244,13 +262,14 @@
       "location": "Reception Area Lobby",
       "shared": false,
       "status": "Available",
-      "createdAt": "2026-07-12T09:55:57.915Z",
-      "updatedAt": "2026-07-12T09:55:57.916Z"
+      "createdAt": "2026-07-12T10:31:04.042Z",
+      "updatedAt": "2026-07-12T10:31:04.042Z",
+      "timestamp": "2026-07-12T10:31:04.042Z"
     },
     {
-      "_id": "yc9fkrimrhmbqzj",
+      "_id": "hs5gt49mrhnkw32",
       "name": "Conference room B2",
-      "category": "39er9tbmrhmbqyg",
+      "category": "w1qcx3kmrhnkw21",
       "assetTag": "B2-CONF",
       "serialNumber": "ROOM-B2-MEETING",
       "acquisitionDate": "2025-01-01T00:00:00.000Z",
@@ -259,13 +278,14 @@
       "location": "Ground Floor Wing B",
       "shared": true,
       "status": "Available",
-      "createdAt": "2026-07-12T09:55:57.919Z",
-      "updatedAt": "2026-07-12T09:55:57.919Z"
+      "createdAt": "2026-07-12T10:31:04.046Z",
+      "updatedAt": "2026-07-12T10:31:04.046Z",
+      "timestamp": "2026-07-12T10:31:04.046Z"
     },
     {
-      "_id": "v1ewh1vmrhmbqzl",
+      "_id": "ue41rwvmrhnkw36",
       "name": "Van AF-343",
-      "category": "ag4ed8vmrhmbqyk",
+      "category": "vgj9wnwmrhnkw24",
       "assetTag": "AF-343",
       "serialNumber": "MAHINDRA-VAN-343",
       "acquisitionDate": "2024-05-10T00:00:00.000Z",
@@ -274,225 +294,192 @@
       "location": "Parking Garage Wing A",
       "shared": true,
       "status": "Available",
-      "createdAt": "2026-07-12T09:55:57.921Z",
-      "updatedAt": "2026-07-12T09:55:57.921Z"
+      "createdAt": "2026-07-12T10:31:04.050Z",
+      "updatedAt": "2026-07-12T10:31:04.050Z",
+      "timestamp": "2026-07-12T10:31:04.050Z"
     }
   ],
   "allocations": [],
   "bookings": [
     {
-      "_id": "crizskumrhmbqzo",
-      "resourceId": "yc9fkrimrhmbqzj",
-      "bookedBy": "a9lntmdmrhmbqxm",
+      "_id": "avmgfj2mrhnkw39",
+      "resourceId": "hs5gt49mrhnkw32",
+      "bookedBy": "pgxcj8lmrhnkw0y",
       "startTime": "2026-07-12T09:00:00.000Z",
       "endTime": "2026-07-12T10:00:00.000Z",
       "purpose": "Procurement Team",
       "status": "Confirmed",
-      "createdAt": "2026-07-12T09:55:57.924Z",
-      "updatedAt": "2026-07-12T09:55:57.924Z"
+      "createdAt": "2026-07-12T10:31:04.053Z",
+      "updatedAt": "2026-07-12T10:31:04.053Z",
+      "timestamp": "2026-07-12T10:31:04.053Z"
     }
   ],
   "maintenances": [
     {
-      "_id": "nx3epyrmrhmbqzq",
-      "asset": "mw3ep3umrhmbqz3",
-      "reportedBy": "a9lntmdmrhmbqxm",
+      "_id": "whhukokmrhnkw3d",
+      "asset": "kjhr939mrhnkw2k",
+      "reportedBy": "pgxcj8lmrhnkw0y",
       "issueDescription": "Projector bulb not turning on",
       "priority": "High",
       "status": "Pending",
-      "createdAt": "2026-07-12T09:55:57.926Z",
-      "updatedAt": "2026-07-12T09:55:57.926Z"
+      "createdAt": "2026-07-12T10:31:04.057Z",
+      "updatedAt": "2026-07-12T10:31:04.057Z",
+      "timestamp": "2026-07-12T10:31:04.057Z"
     },
     {
-      "_id": "i4xvpkgmrhmbqzt",
-      "asset": "qdxk7c4mrhmbqz7",
-      "reportedBy": "mzr07kfmrhmbqxj",
+      "_id": "ocitueemrhnkw3g",
+      "asset": "lh4n21tmrhnkw2n",
+      "reportedBy": "texxpe0mrhnkw0u",
       "issueDescription": "ac unit noisy compressor",
       "priority": "Low",
       "status": "Approved",
-      "createdAt": "2026-07-12T09:55:57.929Z",
-      "updatedAt": "2026-07-12T09:55:57.929Z"
+      "createdAt": "2026-07-12T10:31:04.060Z",
+      "updatedAt": "2026-07-12T10:31:04.060Z",
+      "timestamp": "2026-07-12T10:31:04.061Z"
     },
     {
-      "_id": "prduwozmrhmbqzv",
-      "asset": "mq2ncg8mrhmbqza",
-      "reportedBy": "apwpto2mrhmbqxo",
+      "_id": "rmc35rcmrhnkw3k",
+      "asset": "c0dwi7smrhnkw2q",
+      "reportedBy": "fyv3if8mrhnkw13",
       "issueDescription": "forklift check",
       "priority": "High",
       "status": "Approved",
       "technician": "R varma",
-      "createdAt": "2026-07-12T09:55:57.931Z",
-      "updatedAt": "2026-07-12T09:55:57.931Z"
+      "createdAt": "2026-07-12T10:31:04.064Z",
+      "updatedAt": "2026-07-12T10:31:04.064Z",
+      "timestamp": "2026-07-12T10:31:04.065Z"
     },
     {
-      "_id": "fhploxkmrhmbr00",
-      "asset": "7o6exkemrhmbqzd",
-      "reportedBy": "a9lntmdmrhmbqxm",
+      "_id": "jr53vifmrhnkw3p",
+      "asset": "umsw7osmrhnkw2u",
+      "reportedBy": "pgxcj8lmrhnkw0y",
       "issueDescription": "Printer Jam parts ordered",
       "priority": "Medium",
       "status": "In Progress",
-      "createdAt": "2026-07-12T09:55:57.936Z",
-      "updatedAt": "2026-07-12T09:55:57.936Z"
+      "createdAt": "2026-07-12T10:31:04.069Z",
+      "updatedAt": "2026-07-12T10:31:04.069Z",
+      "timestamp": "2026-07-12T10:31:04.069Z"
     },
     {
-      "_id": "rqeyfmsmrhmbr03",
-      "asset": "qs72tqdmrhmbqzf",
-      "reportedBy": "mzr07kfmrhmbqxj",
+      "_id": "xd2d5sjmrhnkw3x",
+      "asset": "r4lxlhvmrhnkw2y",
+      "reportedBy": "texxpe0mrhnkw0u",
       "issueDescription": "Chair repair resolved 7 Jul",
       "priority": "Low",
       "status": "Resolved",
-      "createdAt": "2026-07-12T09:55:57.939Z",
-      "updatedAt": "2026-07-12T09:55:57.941Z"
+      "createdAt": "2026-07-12T10:31:04.077Z",
+      "updatedAt": "2026-07-12T10:31:04.082Z",
+      "timestamp": "2026-07-12T10:31:04.077Z"
     }
   ],
   "audits": [
     {
-      "_id": "37jd8ejmrhmbr09",
+      "_id": "g7au8pymrhnkw47",
       "title": "Q3 audit",
-      "scopeDepartment": "xjbvdp9mrhmbqy2",
+      "scopeDepartment": "ihtatnkmrhnkw1l",
       "startDate": "2026-07-01T00:00:00.000Z",
       "endDate": "2026-07-15T00:00:00.000Z",
       "auditors": [
-        "82azgismrhmbqxf",
-        "a9lntmdmrhmbqxm"
+        "andx7nkmrhnkw0q",
+        "pgxcj8lmrhnkw0y"
       ],
-      "status": "Completed",
+      "status": "Active",
       "items": [
         {
-          "asset": "br2qfm6mrhmbqyo",
+          "asset": "b8dol15mrhnkw27",
           "verificationStatus": "Verified",
           "notes": "Physically checked at Desk E12.",
-          "verifiedAt": "2026-07-12T09:55:57.942Z"
+          "verifiedAt": "2026-07-12T10:31:04.085Z"
         },
         {
-          "asset": "k4n3jp5mrhmbqyw",
+          "asset": "sd1hyermrhnkw2c",
           "verificationStatus": "Missing",
           "notes": "Asset not located at Desk E14.",
-          "verifiedAt": "2026-07-12T09:55:57.942Z"
+          "verifiedAt": "2026-07-12T10:31:04.085Z"
         },
         {
-          "asset": "bvykv9lmrhmbqz0",
+          "asset": "scapnrpmrhnkw2h",
           "verificationStatus": "Damaged",
           "notes": "Monitor screen cracked at Desk E15.",
-          "verifiedAt": "2026-07-12T09:55:57.942Z"
+          "verifiedAt": "2026-07-12T10:31:04.085Z"
         }
       ],
-      "createdAt": "2026-07-12T09:55:57.945Z",
-      "updatedAt": "2026-07-12T10:14:06.990Z"
+      "createdAt": "2026-07-12T10:31:04.087Z",
+      "updatedAt": "2026-07-12T10:31:04.087Z",
+      "timestamp": "2026-07-12T10:31:04.088Z"
     }
   ],
   "activitylogs": [
     {
-      "_id": "3z2pb53mrhmbr0y",
+      "_id": "2l56z5rmrhnkw53",
       "action": "Database Seeded",
       "details": "Populated mockup data as per Excalidraw UI specs.",
-      "performedBy": "82azgismrhmbqxf",
-      "createdAt": "2026-07-12T09:55:57.970Z",
-      "updatedAt": "2026-07-12T09:55:57.970Z"
-    },
-    {
-      "_id": "0x7ev1smrhmjw3v",
-      "action": "User Logged In",
-      "details": "System Admin logged into the system.",
-      "performedBy": "82azgismrhmbqxf",
-      "createdAt": "2026-07-12T10:02:17.803Z",
-      "updatedAt": "2026-07-12T10:02:17.803Z"
-    },
-    {
-      "_id": "wjnr840mrhmq3f1",
-      "action": "User Logged In",
-      "details": "System Admin logged into the system.",
-      "performedBy": "82azgismrhmbqxf",
-      "createdAt": "2026-07-12T10:07:07.213Z",
-      "updatedAt": "2026-07-12T10:07:07.213Z"
-    },
-    {
-      "_id": "j33srr1mrhmz3ci",
-      "action": "Audit Cycle Closed",
-      "details": "Audit Cycle \"Q3 audit\" closed. Discrepancy details - Missing: 1, Damaged: 1.",
-      "performedBy": "82azgismrhmbqxf",
-      "createdAt": "2026-07-12T10:14:07.026Z",
-      "updatedAt": "2026-07-12T10:14:07.026Z"
+      "performedBy": "andx7nkmrhnkw0q",
+      "createdAt": "2026-07-12T10:31:04.119Z",
+      "updatedAt": "2026-07-12T10:31:04.119Z",
+      "timestamp": "2026-07-12T10:31:04.119Z"
     }
   ],
   "notifications": [
     {
-      "_id": "l514obnmrhmbr0c",
-      "recipient": "82azgismrhmbqxf",
+      "_id": "ch4r9ipmrhnkw4b",
+      "recipient": "andx7nkmrhnkw0q",
       "title": "Asset Assigned",
       "message": "Laptop AF-0014 assigned to Priya shah",
       "type": "Asset Assigned",
-      "timestamp": "2026-07-12T09:53:57.946Z",
-      "createdAt": "2026-07-12T09:55:57.948Z",
-      "updatedAt": "2026-07-12T09:55:57.948Z"
+      "timestamp": "2026-07-12T10:29:04.089Z",
+      "createdAt": "2026-07-12T10:31:04.091Z",
+      "updatedAt": "2026-07-12T10:31:04.091Z"
     },
     {
-      "_id": "wd44ymgmrhmbr0f",
-      "recipient": "82azgismrhmbqxf",
+      "_id": "a2k5g51mrhnkw4g",
+      "recipient": "andx7nkmrhnkw0q",
       "title": "Maintenance Approved",
       "message": "Maintenance request AF-0055 approved",
       "type": "Maintenance Approved",
-      "timestamp": "2026-07-12T09:37:57.946Z",
-      "createdAt": "2026-07-12T09:55:57.951Z",
-      "updatedAt": "2026-07-12T09:55:57.951Z"
+      "timestamp": "2026-07-12T10:13:04.089Z",
+      "createdAt": "2026-07-12T10:31:04.096Z",
+      "updatedAt": "2026-07-12T10:31:04.096Z"
     },
     {
-      "_id": "ti8r8jnmrhmbr0i",
-      "recipient": "82azgismrhmbqxf",
+      "_id": "rlb7bltmrhnkw4k",
+      "recipient": "andx7nkmrhnkw0q",
       "title": "Booking Confirmed",
       "message": "Booking confirmed : Room B2 : 2:00 to 3:00 PM",
       "type": "Booking Confirmed",
-      "timestamp": "2026-07-12T08:55:57.946Z",
-      "createdAt": "2026-07-12T09:55:57.954Z",
-      "updatedAt": "2026-07-12T09:55:57.954Z"
+      "timestamp": "2026-07-12T09:31:04.089Z",
+      "createdAt": "2026-07-12T10:31:04.100Z",
+      "updatedAt": "2026-07-12T10:31:04.100Z"
     },
     {
-      "_id": "iht8dkzmrhmbr0n",
-      "recipient": "82azgismrhmbqxf",
+      "_id": "v1vfi1tmrhnkw4o",
+      "recipient": "andx7nkmrhnkw0q",
       "title": "Transfer Approved",
       "message": "Transfer approved : AF-0033 to facilities dept",
       "type": "Transfer Approved",
-      "timestamp": "2026-07-12T06:55:57.946Z",
-      "createdAt": "2026-07-12T09:55:57.959Z",
-      "updatedAt": "2026-07-12T09:55:57.959Z"
+      "timestamp": "2026-07-12T07:31:04.089Z",
+      "createdAt": "2026-07-12T10:31:04.104Z",
+      "updatedAt": "2026-07-12T10:31:04.104Z"
     },
     {
-      "_id": "pgt83zamrhmbr0r",
-      "recipient": "82azgismrhmbqxf",
+      "_id": "dadtblmmrhnkw4w",
+      "recipient": "andx7nkmrhnkw0q",
       "title": "Overdue Return",
       "message": "Overdue return : AF-0021 was due 3 days ago",
       "type": "Overdue Return",
-      "timestamp": "2026-07-11T09:55:57.946Z",
-      "createdAt": "2026-07-12T09:55:57.963Z",
-      "updatedAt": "2026-07-12T09:55:57.963Z"
+      "timestamp": "2026-07-11T10:31:04.089Z",
+      "createdAt": "2026-07-12T10:31:04.112Z",
+      "updatedAt": "2026-07-12T10:31:04.112Z"
     },
     {
-      "_id": "gjyc6axmrhmbr0u",
-      "recipient": "82azgismrhmbqxf",
+      "_id": "f760lgqmrhnkw4z",
+      "recipient": "andx7nkmrhnkw0q",
       "title": "Audit Discrepancy",
       "message": "audit discrepancy flagged : AF-0088 damaged",
       "type": "Audit Discrepancy",
-      "timestamp": "2026-07-10T09:55:57.946Z",
-      "createdAt": "2026-07-12T09:55:57.966Z",
-      "updatedAt": "2026-07-12T09:55:57.966Z"
-    },
-    {
-      "_id": "6fu0xe6mrhmz3d8",
-      "recipient": "82azgismrhmbqxf",
-      "title": "Audit Discrepancy Report",
-      "message": "Audit Cycle \"Q3 audit\" closed. Discrepancy details - Missing: 1, Damaged: 1.",
-      "type": "Audit Discrepancy",
-      "createdAt": "2026-07-12T10:14:07.052Z",
-      "updatedAt": "2026-07-12T10:14:07.052Z"
-    },
-    {
-      "_id": "7gr8dg0mrhmz3de",
-      "recipient": "mzr07kfmrhmbqxj",
-      "title": "Audit Discrepancy Report",
-      "message": "Audit Cycle \"Q3 audit\" closed. Discrepancy details - Missing: 1, Damaged: 1.",
-      "type": "Audit Discrepancy",
-      "createdAt": "2026-07-12T10:14:07.058Z",
-      "updatedAt": "2026-07-12T10:14:07.058Z"
+      "timestamp": "2026-07-10T10:31:04.089Z",
+      "createdAt": "2026-07-12T10:31:04.115Z",
+      "updatedAt": "2026-07-12T10:31:04.115Z"
     }
   ]
 }

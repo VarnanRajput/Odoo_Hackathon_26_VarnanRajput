@@ -52,7 +52,7 @@ const ActivityLogs = () => {
             {
               key: 'timestamp',
               header: 'Timestamp',
-              render: (row) => new Date(row.timestamp).toLocaleString()
+              render: (row) => new Date(row.timestamp || row.createdAt).toLocaleString()
             },
             {
               key: 'action',
