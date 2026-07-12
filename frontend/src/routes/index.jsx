@@ -19,6 +19,7 @@ import ActivityLogs from '../pages/ActivityLogs';
 import Reports from '../pages/Reports';
 import Unauthorized from '../pages/Unauthorized';
 import NotFound from '../pages/NotFound';
+import Home from '../pages/Home';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -65,6 +66,9 @@ const PublicRoute = ({ children }) => {
 const AppRoutes = () => {
   return (
     <Routes>
+      {/* Public Landing Page */}
+      <Route path="/" element={<Home />} />
+
       {/* Public Authentication Routes */}
       <Route
         path="/login"
@@ -83,18 +87,14 @@ const AppRoutes = () => {
         }
       />
 
-      {/* Private Dashboard Routes (Nested under DashboardLayout) */}
+      {/* Private Dashboard Routes (Nested under DashboardLayout via pathless route) */}
       <Route
-        path="/"
         element={
           <ProtectedRoute>
             <DashboardLayout />
           </ProtectedRoute>
         }
       >
-        {/* Redirect root to /dashboard */}
-        <Route index element={<Navigate to="/dashboard" replace />} />
-        
         <Route path="dashboard" element={<Dashboard />} />
         
         <Route path="assets" element={<Assets />} />

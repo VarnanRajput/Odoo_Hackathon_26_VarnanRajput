@@ -193,6 +193,14 @@
       "performedBy": "qephpd6mrhj3xbz",
       "createdAt": "2026-07-12T08:25:54.087Z",
       "updatedAt": "2026-07-12T08:25:54.087Z"
+    },
+    {
+      "_id": "yas3i7omrhk66oq",
+      "action": "User Logged In",
+      "details": "System Admin logged into the system.",
+      "performedBy": "qephpd6mrhj3xbz",
+      "createdAt": "2026-07-12T08:55:39.098Z",
+      "updatedAt": "2026-07-12T08:55:39.098Z"
     }
   ],
   "notifications": []
