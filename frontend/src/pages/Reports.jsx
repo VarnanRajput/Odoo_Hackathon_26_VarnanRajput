@@ -76,66 +76,109 @@ const Reports = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 select-none">
         
         {/* Left Panel: Utilization by Department (Yellow Vertical Bars) */}
-        <div className="bg-sky-500/10 border border-sky-500/20 rounded-2xl p-6 relative overflow-hidden flex flex-col gap-3 min-h-[220px]">
+        <div className="bg-sky-500/10 border border-sky-500/20 rounded-2xl p-6 relative overflow-hidden flex flex-col gap-3 min-h-[260px]">
           <span className="text-xs font-extrabold text-sky-800 dark:text-sky-300 uppercase tracking-wide">
             Utilization by department
           </span>
           
-          <div className="flex-1 flex items-end justify-between px-4 pb-2 border-b border-sky-500/10 pt-6">
-            <div className="flex flex-col items-center gap-1.5 w-[12%]">
-              <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '50px' }} />
-              <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">IT</span>
+          <div className="flex-1 flex gap-4 pt-4">
+            {/* Y-Axis Labels */}
+            <div className="flex flex-col justify-between text-[9px] font-bold text-sky-700/60 dark:text-sky-400/60 h-28 pb-8 pt-1 shrink-0 select-none text-right w-8">
+              <span>100%</span>
+              <span>50%</span>
+              <span>0%</span>
             </div>
-            <div className="flex flex-col items-center gap-1.5 w-[12%]">
-              <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '90px' }} />
-              <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">HR</span>
-            </div>
-            <div className="flex flex-col items-center gap-1.5 w-[12%]">
-              <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '110px' }} />
-              <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">ENG</span>
-            </div>
-            <div className="flex flex-col items-center gap-1.5 w-[12%]">
-              <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '70px' }} />
-              <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">MKT</span>
-            </div>
-            <div className="flex flex-col items-center gap-1.5 w-[12%]">
-              <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '40px' }} />
-              <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">FIN</span>
-            </div>
-            <div className="flex flex-col items-center gap-1.5 w-[12%]">
-              <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '95px' }} />
-              <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">OPS</span>
+
+            {/* Bars container */}
+            <div className="flex-1 flex flex-col">
+              <div className="flex-1 flex items-end justify-between px-4 pb-2 border-b border-sky-500/10 pt-6 h-28">
+                <div className="flex flex-col items-center gap-1.5 w-[12%]">
+                  <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '50px' }} />
+                  <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">IT</span>
+                </div>
+                <div className="flex flex-col items-center gap-1.5 w-[12%]">
+                  <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '90px' }} />
+                  <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">HR</span>
+                </div>
+                <div className="flex flex-col items-center gap-1.5 w-[12%]">
+                  <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '110px' }} />
+                  <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">ENG</span>
+                </div>
+                <div className="flex flex-col items-center gap-1.5 w-[12%]">
+                  <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '70px' }} />
+                  <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">MKT</span>
+                </div>
+                <div className="flex flex-col items-center gap-1.5 w-[12%]">
+                  <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '40px' }} />
+                  <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">FIN</span>
+                </div>
+                <div className="flex flex-col items-center gap-1.5 w-[12%]">
+                  <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '95px' }} />
+                  <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">OPS</span>
+                </div>
+              </div>
+              
+              {/* X-Axis Tag */}
+              <div className="text-center text-[9px] font-extrabold text-sky-700/80 dark:text-sky-400/80 mt-2 uppercase tracking-wide">
+                Departments
+              </div>
             </div>
           </div>
         </div>
 
         {/* Right Panel: Maintenance Frequency (Red Line Chart) */}
-        <div className="bg-sky-500/10 border border-sky-500/20 rounded-2xl p-6 relative overflow-hidden flex flex-col gap-3 min-h-[220px]">
+        <div className="bg-sky-500/10 border border-sky-500/20 rounded-2xl p-6 relative overflow-hidden flex flex-col gap-3 min-h-[260px]">
           <span className="text-xs font-extrabold text-sky-800 dark:text-sky-300 uppercase tracking-wide">
             Maintenance Frequency
           </span>
 
-          <div className="flex-1 relative flex items-end pt-8">
-            {/* Draw custom SVG red line graph */}
-            <svg className="w-full h-24 overflow-visible" viewBox="0 0 100 50" preserveAspectRatio="none">
-              {/* Grid guide */}
-              <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(14, 165, 233, 0.1)" strokeWidth="1" />
-              {/* SVG Red Line graph */}
-              <path
-                d="M 5,40 L 25,25 L 45,35 L 65,15 L 85,10 M 85,10"
-                fill="none"
-                stroke="#f43f5e"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              {/* Drop Dots */}
-              <circle cx="5" cy="40" r="1.5" fill="#f43f5e" />
-              <circle cx="25" cy="25" r="1.5" fill="#f43f5e" />
-              <circle cx="45" cy="35" r="1.5" fill="#f43f5e" />
-              <circle cx="65" cy="15" r="1.5" fill="#f43f5e" />
-              <circle cx="85" cy="10" r="1.5" fill="#f43f5e" />
-            </svg>
+          <div className="flex-1 flex gap-4 pt-4">
+            {/* Y-Axis Labels */}
+            <div className="flex flex-col justify-between text-[9px] font-bold text-sky-700/60 dark:text-sky-400/60 h-28 pb-8 pt-1 shrink-0 select-none text-right w-8">
+              <span>20 Rpr</span>
+              <span>10 Rpr</span>
+              <span>0 Rpr</span>
+            </div>
+
+            {/* Line Graph container */}
+            <div className="flex-1 flex flex-col">
+              <div className="flex-1 relative flex items-end border-b border-sky-500/10 h-28">
+                {/* Draw custom SVG red line graph */}
+                <svg className="w-full h-20 overflow-visible" viewBox="0 0 100 50" preserveAspectRatio="none">
+                  {/* Grid guide */}
+                  <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(14, 165, 233, 0.05)" strokeWidth="1" />
+                  {/* SVG Red Line graph */}
+                  <path
+                    d="M 5,40 L 25,25 L 45,35 L 65,15 L 85,10 M 85,10"
+                    fill="none"
+                    stroke="#f43f5e"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  {/* Drop Dots */}
+                  <circle cx="5" cy="40" r="1.5" fill="#f43f5e" />
+                  <circle cx="25" cy="25" r="1.5" fill="#f43f5e" />
+                  <circle cx="45" cy="35" r="1.5" fill="#f43f5e" />
+                  <circle cx="65" cy="15" r="1.5" fill="#f43f5e" />
+                  <circle cx="85" cy="10" r="1.5" fill="#f43f5e" />
+                </svg>
+              </div>
+
+              {/* X-Axis Labels */}
+              <div className="flex justify-between px-2 text-[8px] font-bold text-sky-700/60 dark:text-sky-400/60 mt-1 select-none">
+                <span>Jan</span>
+                <span>Feb</span>
+                <span>Mar</span>
+                <span>Apr</span>
+                <span>May</span>
+              </div>
+
+              {/* X-Axis Tag */}
+              <div className="text-center text-[9px] font-extrabold text-sky-700/80 dark:text-sky-400/80 mt-1 uppercase tracking-wide">
+                Months
+              </div>
+            </div>
           </div>
         </div>
       </div>

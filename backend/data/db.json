@@ -153,9 +153,9 @@
       "condition": "Good",
       "location": "Desk E14",
       "shared": false,
-      "status": "Available",
+      "status": "Lost",
       "createdAt": "2026-07-12T09:55:57.896Z",
-      "updatedAt": "2026-07-12T09:55:57.896Z"
+      "updatedAt": "2026-07-12T10:14:06.941Z"
     },
     {
       "_id": "bvykv9lmrhmbqz0",
@@ -165,12 +165,12 @@
       "serialNumber": "MONITOR-DELL-E15",
       "acquisitionDate": "2025-11-20T00:00:00.000Z",
       "acquisitionCost": 350,
-      "condition": "Good",
+      "condition": "Damaged",
       "location": "Desk E15",
       "shared": false,
       "status": "Available",
       "createdAt": "2026-07-12T09:55:57.900Z",
-      "updatedAt": "2026-07-12T09:55:57.900Z"
+      "updatedAt": "2026-07-12T10:14:06.967Z"
     },
     {
       "_id": "mw3ep3umrhmbqz3",
@@ -356,7 +356,7 @@
         "82azgismrhmbqxf",
         "a9lntmdmrhmbqxm"
       ],
-      "status": "Active",
+      "status": "Completed",
       "items": [
         {
           "asset": "br2qfm6mrhmbqyo",
@@ -378,7 +378,7 @@
         }
       ],
       "createdAt": "2026-07-12T09:55:57.945Z",
-      "updatedAt": "2026-07-12T09:55:57.945Z"
+      "updatedAt": "2026-07-12T10:14:06.990Z"
     }
   ],
   "activitylogs": [
@@ -389,6 +389,30 @@
       "performedBy": "82azgismrhmbqxf",
       "createdAt": "2026-07-12T09:55:57.970Z",
       "updatedAt": "2026-07-12T09:55:57.970Z"
+    },
+    {
+      "_id": "0x7ev1smrhmjw3v",
+      "action": "User Logged In",
+      "details": "System Admin logged into the system.",
+      "performedBy": "82azgismrhmbqxf",
+      "createdAt": "2026-07-12T10:02:17.803Z",
+      "updatedAt": "2026-07-12T10:02:17.803Z"
+    },
+    {
+      "_id": "wjnr840mrhmq3f1",
+      "action": "User Logged In",
+      "details": "System Admin logged into the system.",
+      "performedBy": "82azgismrhmbqxf",
+      "createdAt": "2026-07-12T10:07:07.213Z",
+      "updatedAt": "2026-07-12T10:07:07.213Z"
+    },
+    {
+      "_id": "j33srr1mrhmz3ci",
+      "action": "Audit Cycle Closed",
+      "details": "Audit Cycle \"Q3 audit\" closed. Discrepancy details - Missing: 1, Damaged: 1.",
+      "performedBy": "82azgismrhmbqxf",
+      "createdAt": "2026-07-12T10:14:07.026Z",
+      "updatedAt": "2026-07-12T10:14:07.026Z"
     }
   ],
   "notifications": [
@@ -451,6 +475,24 @@
       "timestamp": "2026-07-10T09:55:57.946Z",
       "createdAt": "2026-07-12T09:55:57.966Z",
       "updatedAt": "2026-07-12T09:55:57.966Z"
+    },
+    {
+      "_id": "6fu0xe6mrhmz3d8",
+      "recipient": "82azgismrhmbqxf",
+      "title": "Audit Discrepancy Report",
+      "message": "Audit Cycle \"Q3 audit\" closed. Discrepancy details - Missing: 1, Damaged: 1.",
+      "type": "Audit Discrepancy",
+      "createdAt": "2026-07-12T10:14:07.052Z",
+      "updatedAt": "2026-07-12T10:14:07.052Z"
+    },
+    {
+      "_id": "7gr8dg0mrhmz3de",
+      "recipient": "mzr07kfmrhmbqxj",
+      "title": "Audit Discrepancy Report",
+      "message": "Audit Cycle \"Q3 audit\" closed. Discrepancy details - Missing: 1, Damaged: 1.",
+      "type": "Audit Discrepancy",
+      "createdAt": "2026-07-12T10:14:07.058Z",
+      "updatedAt": "2026-07-12T10:14:07.058Z"
     }
   ]
 }

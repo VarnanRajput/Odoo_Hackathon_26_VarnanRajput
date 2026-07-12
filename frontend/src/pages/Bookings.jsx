@@ -130,11 +130,15 @@ const Bookings = () => {
   // Check if a specific hour slot is booked on selectedDate
   const getBookingForHour = (hour) => {
     return bookings.find(b => {
-      if (b.status === 'Cancelled') return false;
+      if (!b || b.status === 'Cancelled') return false;
+      if (!b.startTime || !b.endTime) return false;
+      
       const bStart = new Date(b.startTime);
       const bEnd = new Date(b.endTime);
-      const bDateStr = bStart.toISOString().split('T')[0];
       
+      if (isNaN(bStart.getTime()) || isNaN(bEnd.getTime())) return false;
+      
+      const bDateStr = bStart.toISOString().split('T')[0];
       if (bDateStr !== selectedDate) return false;
 
       // Extract hours
@@ -149,18 +153,23 @@ const Bookings = () => {
   // Check if there is an overlap conflict with the user's active form inputs
   const checkConflict = () => {
     if (bookDate !== selectedDate) return false;
+    if (!startTime || !endTime) return false;
     
     // Parse form draft values
     const draftStart = parseInt(startTime.split(':')[0]);
     const draftEnd = parseInt(endTime.split(':')[0]);
+    if (isNaN(draftStart) || isNaN(draftEnd)) return false;
     
     // Find any booking that clashes with these hours on this date
     return bookings.some(b => {
-      if (b.status === 'Cancelled') return false;
+      if (!b || b.status === 'Cancelled') return false;
+      if (!b.startTime || !b.endTime) return false;
+      
       const bStart = new Date(b.startTime);
       const bEnd = new Date(b.endTime);
-      const bDateStr = bStart.toISOString().split('T')[0];
+      if (isNaN(bStart.getTime()) || isNaN(bEnd.getTime())) return false;
       
+      const bDateStr = bStart.toISOString().split('T')[0];
       if (bDateStr !== bookDate) return false;
       
       const bStartHour = bStart.getHours();

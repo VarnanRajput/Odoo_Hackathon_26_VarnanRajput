@@ -135,6 +135,9 @@ class MockModel {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
+    if (newItem.timestamp === undefined) {
+      newItem.timestamp = new Date().toISOString();
+    }
     store[this.collection].push(newItem);
     saveDb();
     return JSON.parse(JSON.stringify(newItem));
