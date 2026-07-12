@@ -1,0 +1,199 @@
+{
+  "users": [
+    {
+      "_id": "qephpd6mrhj3xbz",
+      "name": "System Admin",
+      "email": "admin@assetflow.com",
+      "password": "$2b$10$flSS61Td4hM.mpjAt47COue1QqJM8Rv.2V918iSZ.PVN6896pRwDe",
+      "role": "Admin",
+      "status": "Active",
+      "createdAt": "2026-07-12T08:25:54.047Z",
+      "updatedAt": "2026-07-12T08:25:54.048Z"
+    },
+    {
+      "_id": "arxsa25mrhj3xc2",
+      "name": "John Doe",
+      "email": "john@assetflow.com",
+      "password": "$2b$10$flSS61Td4hM.mpjAt47COuAHTfzcfwq2LV4c/.mL1n9K2GyeiKqoq",
+      "role": "Employee",
+      "status": "Active",
+      "createdAt": "2026-07-12T08:25:54.050Z",
+      "updatedAt": "2026-07-12T08:25:54.064Z",
+      "department": "pd1qtgumrhj3xc9"
+    },
+    {
+      "_id": "n8pahuwmrhj3xc3",
+      "name": "Priya Sharma",
+      "email": "priya@assetflow.com",
+      "password": "$2b$10$flSS61Td4hM.mpjAt47COuAHTfzcfwq2LV4c/.mL1n9K2GyeiKqoq",
+      "role": "Asset Manager",
+      "status": "Active",
+      "createdAt": "2026-07-12T08:25:54.051Z",
+      "updatedAt": "2026-07-12T08:25:54.067Z",
+      "department": "qtdzz6hmrhj3xce"
+    },
+    {
+      "_id": "w1gbn63mrhj3xc6",
+      "name": "Raj Patel",
+      "email": "raj@assetflow.com",
+      "password": "$2b$10$flSS61Td4hM.mpjAt47COuAHTfzcfwq2LV4c/.mL1n9K2GyeiKqoq",
+      "role": "Department Head",
+      "status": "Active",
+      "createdAt": "2026-07-12T08:25:54.054Z",
+      "updatedAt": "2026-07-12T08:25:54.070Z",
+      "department": "pd1qtgumrhj3xc9"
+    }
+  ],
+  "departments": [
+    {
+      "_id": "pd1qtgumrhj3xc9",
+      "name": "Information Technology",
+      "manager": "w1gbn63mrhj3xc6",
+      "status": "Active",
+      "createdAt": "2026-07-12T08:25:54.057Z",
+      "updatedAt": "2026-07-12T08:25:54.057Z"
+    },
+    {
+      "_id": "8tlsc1smrhj3xcb",
+      "name": "Human Resources",
+      "status": "Active",
+      "createdAt": "2026-07-12T08:25:54.059Z",
+      "updatedAt": "2026-07-12T08:25:54.059Z"
+    },
+    {
+      "_id": "qtdzz6hmrhj3xce",
+      "name": "Operations",
+      "status": "Active",
+      "createdAt": "2026-07-12T08:25:54.062Z",
+      "updatedAt": "2026-07-12T08:25:54.062Z"
+    }
+  ],
+  "categories": [
+    {
+      "_id": "ri7f2cemrhj3xco",
+      "name": "Electronics",
+      "fields": [
+        {
+          "name": "warrantyPeriod",
+          "type": "number",
+          "label": "Warranty Period (Months)"
+        },
+        {
+          "name": "manufacturer",
+          "type": "text",
+          "label": "Manufacturer"
+        }
+      ],
+      "createdAt": "2026-07-12T08:25:54.072Z",
+      "updatedAt": "2026-07-12T08:25:54.072Z"
+    },
+    {
+      "_id": "gknok42mrhj3xcr",
+      "name": "Furniture",
+      "fields": [
+        {
+          "name": "material",
+          "type": "text",
+          "label": "Material type"
+        }
+      ],
+      "createdAt": "2026-07-12T08:25:54.075Z",
+      "updatedAt": "2026-07-12T08:25:54.075Z"
+    },
+    {
+      "_id": "rutv5hbmrhj3xcs",
+      "name": "Vehicles",
+      "fields": [
+        {
+          "name": "licensePlate",
+          "type": "text",
+          "label": "License Plate"
+        },
+        {
+          "name": "insuranceExpiry",
+          "type": "date",
+          "label": "Insurance Expiry Date"
+        }
+      ],
+      "createdAt": "2026-07-12T08:25:54.076Z",
+      "updatedAt": "2026-07-12T08:25:54.076Z"
+    }
+  ],
+  "assets": [
+    {
+      "_id": "oioxa2cmrhj3xcu",
+      "name": "MacBook Pro 16\"",
+      "category": "ri7f2cemrhj3xco",
+      "assetTag": "AF-0001",
+      "serialNumber": "C02F89XXMD6M",
+      "acquisitionDate": "2026-01-15T00:00:00.000Z",
+      "acquisitionCost": 2499,
+      "condition": "New",
+      "location": "IT Lab Room 402",
+      "shared": false,
+      "status": "Available",
+      "createdAt": "2026-07-12T08:25:54.078Z",
+      "updatedAt": "2026-07-12T08:25:54.078Z"
+    },
+    {
+      "_id": "lw7kxutmrhj3xcw",
+      "name": "Conference Room Alpha Projector",
+      "category": "ri7f2cemrhj3xco",
+      "assetTag": "AF-0002",
+      "serialNumber": "EPSON-823904",
+      "acquisitionDate": "2025-06-10T00:00:00.000Z",
+      "acquisitionCost": 899,
+      "condition": "Good",
+      "location": "Conference Room Alpha",
+      "shared": true,
+      "status": "Available",
+      "createdAt": "2026-07-12T08:25:54.080Z",
+      "updatedAt": "2026-07-12T08:25:54.080Z"
+    },
+    {
+      "_id": "03dodr9mrhj3xcz",
+      "name": "Ergonomic Desk Chair",
+      "category": "gknok42mrhj3xcr",
+      "assetTag": "AF-0003",
+      "serialNumber": "STEELCASE-GESTURE",
+      "acquisitionDate": "2025-11-20T00:00:00.000Z",
+      "acquisitionCost": 1100,
+      "condition": "Good",
+      "location": "Main Workspace Floor 2",
+      "shared": false,
+      "status": "Available",
+      "createdAt": "2026-07-12T08:25:54.083Z",
+      "updatedAt": "2026-07-12T08:25:54.083Z"
+    },
+    {
+      "_id": "7l6hg9kmrhj3xd1",
+      "name": "Company Delivery Van",
+      "category": "rutv5hbmrhj3xcs",
+      "assetTag": "AF-0004",
+      "serialNumber": "FORD-TRANSIT-2026",
+      "acquisitionDate": "2026-02-01T00:00:00.000Z",
+      "acquisitionCost": 35000,
+      "condition": "New",
+      "location": "Parking Garage Slot 12",
+      "shared": true,
+      "status": "Available",
+      "createdAt": "2026-07-12T08:25:54.085Z",
+      "updatedAt": "2026-07-12T08:25:54.085Z"
+    }
+  ],
+  "allocations": [],
+  "bookings": [],
+  "maintenances": [],
+  "audits": [],
+  "activitylogs": [
+    {
+      "_id": "8wzp7kzmrhj3xd3",
+      "action": "Database Seeded",
+      "details": "Populated default Admin, test employees, departments, categories, and assets.",
+      "performedBy": "qephpd6mrhj3xbz",
+      "createdAt": "2026-07-12T08:25:54.087Z",
+      "updatedAt": "2026-07-12T08:25:54.087Z"
+    }
+  ],
+  "notifications": []
+}
