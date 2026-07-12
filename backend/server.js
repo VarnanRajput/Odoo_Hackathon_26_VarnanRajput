@@ -27,6 +27,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/departments", departmentRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/employees", userRoutes);
 app.use("/api/assets", assetRoutes);
 app.use("/api/allocations", allocationRoutes);
 app.use("/api/bookings", bookingRoutes);
@@ -36,6 +37,7 @@ app.use("/api/transfers", transferRoutes);
 app.use("/api/audits", auditRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/activity-logs", activityLogRoutes);
+app.use("/api/logs", activityLogRoutes);
 app.use("/api/reports", reportRoutes);
 
 app.get("/", (req, res) => {
@@ -47,17 +49,25 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-sequelize
-  .authenticate()
-  .then(async () => {
+const startServer = async () => {
+  try {
+    await sequelize.authenticate();
     console.log("✅ MySQL Connected");
 
     await sequelize.sync();
-
     console.log("✅ Database Synced");
 
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
-  })
-  .catch((err) => console.log(err));
+  } catch (error) {
+    console.error("❌ Database connection failed:", error);
+    process.exit(1);
+  }
+};
+
+if (require.main === module) {
+  startServer();
+}
+
+module.exports = { app, startServer };

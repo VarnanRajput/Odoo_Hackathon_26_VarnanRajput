@@ -9,177 +9,128 @@ const Booking = require("./Booking");
 const Maintenance = require("./Maintenance");
 const AuditCycle = require("./AuditCycle");
 const AuditItem = require("./AuditItem");
-const TransferRequest = require("./TransferRequest");
-const Notification = require("./Notification");
 const ActivityLog = require("./ActivityLog");
+const Notification = require("./Notification");
+const TransferRequest = require("./TransferRequest");
 
-// Department ↔ User
-Department.hasMany(User, { foreignKey: "departmentId" });
-User.belongsTo(Department, { foreignKey: "departmentId" });
+User.belongsTo(Department, { foreignKey: "departmentId", as: "Department" });
+Department.hasMany(User, { foreignKey: "departmentId", as: "Users" });
 
-// Department ↔ Asset
-Department.hasMany(Asset, { foreignKey: "departmentId" });
-Asset.belongsTo(Department, { foreignKey: "departmentId" });
+Department.hasMany(Asset, { foreignKey: "departmentId", as: "Assets" });
+Category.hasMany(Asset, { foreignKey: "categoryId", as: "Assets" });
+Asset.belongsTo(Department, { foreignKey: "departmentId", as: "Department" });
+Asset.belongsTo(Category, { foreignKey: "categoryId", as: "Category" });
+Asset.belongsTo(User, { foreignKey: "allocatedTo", as: "AllocatedUser" });
+Asset.hasMany(Allocation, { foreignKey: "assetId", as: "Allocations" });
+Asset.hasMany(Maintenance, { foreignKey: "assetId", as: "MaintenanceRequests" });
 
-// Category ↔ Asset
-Category.hasMany(Asset, { foreignKey: "categoryId" });
-Asset.belongsTo(Category, { foreignKey: "categoryId" });
+Allocation.belongsTo(Asset, { foreignKey: "assetId", as: "Asset" });
+Allocation.belongsTo(User, { foreignKey: "employeeId", as: "Employee" });
+Allocation.belongsTo(Department, { foreignKey: "departmentId", as: "Department" });
+Allocation.belongsTo(User, { foreignKey: "allocatedBy", as: "AllocatedByUser" });
 
-// User ↔ Asset (Allocated User)
-User.hasMany(Asset, {
-  foreignKey: "allocatedTo",
-  as: "AllocatedAssets",
-});
-Asset.belongsTo(User, {
-  foreignKey: "allocatedTo",
-  as: "AllocatedUser",
-});
+Booking.belongsTo(Asset, { foreignKey: "assetId", as: "Asset" });
+Booking.belongsTo(User, { foreignKey: "employeeId", as: "Employee" });
 
-// Department ↔ Asset (Allocated Department)
-Department.hasMany(Asset, {
-  foreignKey: "allocatedToDepartmentId",
-  as: "AllocatedDeptAssets",
-});
-Asset.belongsTo(Department, {
-  foreignKey: "allocatedToDepartmentId",
-  as: "AllocatedDepartment",
-});
+Maintenance.belongsTo(Asset, { foreignKey: "assetId", as: "Asset" });
+Maintenance.belongsTo(User, { foreignKey: "reportedBy", as: "Reporter" });
+Maintenance.belongsTo(User, { foreignKey: "assignedTo", as: "AssignedTo" });
 
-// Asset ↔ Allocation
-Asset.hasMany(Allocation, { foreignKey: "assetId" });
-Allocation.belongsTo(Asset, { foreignKey: "assetId" });
+AuditCycle.hasMany(AuditItem, { foreignKey: "auditCycleId", as: "AuditItems" });
+AuditItem.belongsTo(AuditCycle, { foreignKey: "auditCycleId", as: "AuditCycle" });
+AuditItem.belongsTo(Asset, { foreignKey: "assetId", as: "Asset" });
+AuditItem.belongsTo(User, { foreignKey: "auditorId", as: "Auditor" });
 
-// User ↔ Allocation
-User.hasMany(Allocation, {
-  foreignKey: "employeeId",
-  as: "EmployeeAllocations",
-});
-Allocation.belongsTo(User, {
-  foreignKey: "employeeId",
-  as: "Employee",
-});
+ActivityLog.belongsTo(User, { foreignKey: "userId", as: "User" });
+Notification.belongsTo(User, { foreignKey: "userId", as: "User" });
 
-// Department ↔ Allocation
-Department.hasMany(Allocation, {
-  foreignKey: "departmentId",
-  as: "DepartmentAllocations",
-});
-Allocation.belongsTo(Department, {
-  foreignKey: "departmentId",
-  as: "Department",
-});
+TransferRequest.belongsTo(Asset, { foreignKey: "assetId", as: "Asset" });
+TransferRequest.belongsTo(User, { foreignKey: "fromEmployeeId", as: "FromEmployee" });
+TransferRequest.belongsTo(User, { foreignKey: "toEmployeeId", as: "ToEmployee" });
+TransferRequest.belongsTo(Department, { foreignKey: "fromDepartmentId", as: "FromDepartment" });
+TransferRequest.belongsTo(Department, { foreignKey: "toDepartmentId", as: "ToDepartment" });
+TransferRequest.belongsTo(User, { foreignKey: "requestedById", as: "RequestedBy" });
+TransferRequest.belongsTo(User, { foreignKey: "actionedById", as: "ActionedBy" });
 
-// Asset ↔ Booking
-Asset.hasMany(Booking, { foreignKey: "assetId" });
-Booking.belongsTo(Asset, { foreignKey: "assetId" });
+// Add compatibility aliases for frontend compatibility (MongoDB Mongoose mapping)
+const models = {
+  User,
+  Department,
+  Category,
+  Asset,
+  Allocation,
+  Booking,
+  Maintenance,
+  AuditCycle,
+  AuditItem,
+  ActivityLog,
+  Notification,
+  TransferRequest,
+};
 
-// User ↔ Booking
-User.hasMany(Booking, { foreignKey: "employeeId" });
-Booking.belongsTo(User, { foreignKey: "employeeId" });
+for (const modelName of Object.keys(models)) {
+  const model = models[modelName];
+  if (model && model.prototype) {
+    model.prototype.toJSON = function () {
+      const values = { ...this.get() };
+      
+      // Standard Mongo ID alias
+      values._id = values.id;
 
-// Asset ↔ Maintenance
-Asset.hasMany(Maintenance, { foreignKey: "assetId" });
-Maintenance.belongsTo(Asset, { foreignKey: "assetId" });
-
-// User ↔ Maintenance (Reporter)
-User.hasMany(Maintenance, {
-  foreignKey: "reportedBy",
-  as: "Reporter",
-});
-Maintenance.belongsTo(User, {
-  foreignKey: "reportedBy",
-  as: "Reporter",
-});
-
-// AuditCycle ↔ AuditItem
-AuditCycle.hasMany(AuditItem, { foreignKey: "auditCycleId", onDelete: "CASCADE" });
-AuditItem.belongsTo(AuditCycle, { foreignKey: "auditCycleId" });
-
-// Asset ↔ AuditItem
-Asset.hasMany(AuditItem, { foreignKey: "assetId" });
-AuditItem.belongsTo(Asset, { foreignKey: "assetId" });
-
-// User ↔ AuditItem (Auditor)
-User.hasMany(AuditItem, {
-  foreignKey: "auditorId",
-  as: "AuditorItems",
-});
-AuditItem.belongsTo(User, {
-  foreignKey: "auditorId",
-  as: "Auditor",
-});
-
-// Asset ↔ TransferRequest
-Asset.hasMany(TransferRequest, { foreignKey: "assetId" });
-TransferRequest.belongsTo(Asset, { foreignKey: "assetId" });
-
-// User ↔ TransferRequest (Requester)
-User.hasMany(TransferRequest, {
-  foreignKey: "requestedById",
-  as: "RequestedTransfers",
-});
-TransferRequest.belongsTo(User, {
-  foreignKey: "requestedById",
-  as: "Requester",
-});
-
-// User ↔ TransferRequest (FromEmployee)
-User.hasMany(TransferRequest, {
-  foreignKey: "fromEmployeeId",
-  as: "FromEmployeeTransfers",
-});
-TransferRequest.belongsTo(User, {
-  foreignKey: "fromEmployeeId",
-  as: "FromEmployee",
-});
-
-// User ↔ TransferRequest (ToEmployee)
-User.hasMany(TransferRequest, {
-  foreignKey: "toEmployeeId",
-  as: "ToEmployeeTransfers",
-});
-TransferRequest.belongsTo(User, {
-  foreignKey: "toEmployeeId",
-  as: "ToEmployee",
-});
-
-// User ↔ TransferRequest (Actioner)
-User.hasMany(TransferRequest, {
-  foreignKey: "actionedById",
-  as: "ActionedTransfers",
-});
-TransferRequest.belongsTo(User, {
-  foreignKey: "actionedById",
-  as: "Actioner",
-});
-
-// Department ↔ TransferRequest (FromDepartment)
-Department.hasMany(TransferRequest, {
-  foreignKey: "fromDepartmentId",
-  as: "FromDeptTransfers",
-});
-TransferRequest.belongsTo(Department, {
-  foreignKey: "fromDepartmentId",
-  as: "FromDepartment",
-});
-
-// Department ↔ TransferRequest (ToDepartment)
-Department.hasMany(TransferRequest, {
-  foreignKey: "toDepartmentId",
-  as: "ToDeptTransfers",
-});
-TransferRequest.belongsTo(Department, {
-  foreignKey: "toDepartmentId",
-  as: "ToDepartment",
-});
-
-// User ↔ Notification
-User.hasMany(Notification, { foreignKey: "userId" });
-Notification.belongsTo(User, { foreignKey: "userId" });
-
-// User ↔ ActivityLog
-User.hasMany(ActivityLog, { foreignKey: "userId" });
-ActivityLog.belongsTo(User, { foreignKey: "userId" });
+      // Model-specific compatibility aliases
+      if (modelName === "Asset") {
+        values.assetTag = values.assetCode;
+        values.acquisitionDate = values.purchaseDate;
+        values.acquisitionCost = values.purchaseCost;
+        values.shared = values.isBookable;
+        values.category = values.categoryId;
+      }
+      if (modelName === "Department") {
+        values.manager = values.headId;
+        values.parentDepartment = values.parentDepartmentId;
+      }
+      if (modelName === "Category") {
+        values.fields = values.customFields || [];
+      }
+      if (modelName === "Allocation") {
+        values.asset = values.assetId;
+        values.assignedTo = values.employeeId;
+        values.assignedDepartment = values.departmentId;
+        values.checkOutNotes = values.remarks;
+        values.checkInNotes = values.remarks;
+      }
+      if (modelName === "Booking") {
+        values.resource = values.assetId;
+        values.bookedBy = values.employeeId;
+      }
+      if (modelName === "Maintenance") {
+        values.asset = values.assetId;
+        values.issueDescription = values.issue;
+      }
+      if (modelName === "AuditCycle") {
+        values.title = values.name;
+        values.scopeDepartment = values.scopeType === "Department" ? values.scopeValue : null;
+        values.scopeLocation = values.scopeType === "Location" ? values.scopeValue : "";
+        values.auditors = values.auditorIds || [];
+        values.items = values.AuditItems || [];
+      }
+      if (modelName === "AuditItem") {
+        values.asset = values.assetId;
+        values.auditor = values.auditorId;
+        values.verificationStatus = values.status;
+        values.notes = values.remarks;
+      }
+      if (modelName === "ActivityLog") {
+        values.performedBy = values.userId;
+      }
+      if (modelName === "Notification") {
+        values.recipient = values.userId;
+        values.title = values.type;
+      }
+      return values;
+    };
+  }
+}
 
 module.exports = {
   sequelize,
@@ -192,7 +143,7 @@ module.exports = {
   Maintenance,
   AuditCycle,
   AuditItem,
-  TransferRequest,
-  Notification,
   ActivityLog,
+  Notification,
+  TransferRequest,
 };

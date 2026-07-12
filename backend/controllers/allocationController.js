@@ -218,3 +218,75 @@ exports.getOverdueAllocations = async (req, res) => {
     });
   }
 };
+
+exports.createTransferRequest = async (req, res) => {
+  try {
+    const { assetId, targetUserId, notes } = req.body;
+    const asset = await Asset.findByPk(assetId);
+    if (!asset) {
+      return res.status(404).json({ success: false, message: "Asset not found" });
+    }
+
+    const activeAlloc = await Allocation.findOne({ where: { assetId, status: "Allocated" } });
+    if (!activeAlloc) {
+      return res.status(400).json({ success: false, message: "Asset has no active allocations to transfer" });
+    }
+
+    await notifyRoles(["Admin", "AssetManager"], `${req.user ? req.user.name : "An employee"} is requesting transfer of asset ${asset.name} (${asset.assetCode}) currently held by another user.`, "Transfer Requested");
+
+    const actorId = req.user ? req.user.id : 1;
+    await logActivity(actorId, "Transfer Requested", `Transfer of asset ${asset.name} requested for employee ID: ${targetUserId}.`);
+
+    return res.json({
+      success: true,
+      message: "Transfer request submitted successfully. Awaiting Manager approval."
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+exports.approveDirectTransfer = async (req, res) => {
+  try {
+    const { targetUserId } = req.body;
+    const originalAlloc = await Allocation.findByPk(req.params.id);
+    if (!originalAlloc) {
+      return res.status(404).json({ success: false, message: "Allocation not found" });
+    }
+
+    const todayStr = new Date().toISOString().split("T")[0];
+    
+    originalAlloc.status = "Returned";
+    originalAlloc.actualReturnDate = todayStr;
+    originalAlloc.remarks = (originalAlloc.remarks ? originalAlloc.remarks + "\n" : "") + `Transferred directly to user ${targetUserId}`;
+    await originalAlloc.save();
+
+    const newAlloc = await Allocation.create({
+      assetId: originalAlloc.assetId,
+      employeeId: targetUserId,
+      allocatedBy: req.user ? req.user.id : 1,
+      allocationDate: todayStr,
+      status: "Allocated",
+      remarks: "Acquired via Direct Manager Transfer Approval",
+    });
+
+    const asset = await Asset.findByPk(originalAlloc.assetId);
+    if (asset) {
+      asset.allocatedTo = targetUserId;
+      asset.allocatedToDepartmentId = null;
+      asset.status = "Allocated";
+      await asset.save();
+    }
+
+    await notifyUser(targetUserId, `Asset ${asset ? asset.name : "item"} transfer approved. It is now allocated to you.`, "Transfer Approved");
+
+    const actorId = req.user ? req.user.id : 1;
+    await logActivity(actorId, "Transfer Approved", `Approved asset transfer from allocation ${originalAlloc.id} to new user ${targetUserId}.`);
+
+    return res.json({ success: true, data: newAlloc });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: err.message });
+  }
+};
