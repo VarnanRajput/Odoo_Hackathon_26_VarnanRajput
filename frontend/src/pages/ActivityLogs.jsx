@@ -15,11 +15,11 @@ const ActivityLogs = () => {
     setLoading(true);
     try {
       const [logsRes, empsRes] = await Promise.all([
-        api.get('/logs'),
-        api.get('/employees')
+        api.get('/activity-logs'),
+        api.get('/users')
       ]);
-      setLogs(logsRes.data.data);
-      setEmployees(empsRes.data.data);
+      setLogs(logsRes.data.data || []);
+      setEmployees(empsRes.data.data || []);
     } catch (err) {
       showNotification('Unable to load activity logs', 'error');
     } finally {
@@ -31,8 +31,12 @@ const ActivityLogs = () => {
     fetchData();
   }, []);
 
-  const getEmployeeName = (id) => {
-    const emp = employees.find(e => e._id === id);
+  const getEmployeeName = (row) => {
+    const user = row?.User || null;
+    if (user) {
+      return `${user.name} (${user.role})`;
+    }
+    const emp = employees.find((e) => e.id === row?.userId || e.id === row?.performedBy);
     return emp ? `${emp.name} (${emp.role})` : <span className="opacity-40">System Trigger</span>;
   };
 
@@ -67,7 +71,7 @@ const ActivityLogs = () => {
             {
               key: 'performedBy',
               header: 'Performed By',
-              render: (row) => getEmployeeName(row.performedBy)
+              render: (row) => getEmployeeName(row)
             }
           ]}
           data={logs}

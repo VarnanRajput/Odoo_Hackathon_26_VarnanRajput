@@ -36,7 +36,7 @@ const Dashboard = () => {
         api.get('/allocations'),
         api.get('/bookings'),
         api.get('/maintenance'),
-        api.get('/logs').catch(() => ({ data: { data: [] } })) // gracefully handle if standard employee has no access to logs
+        api.get('/activity-logs').catch(() => ({ data: { data: [] } }))
       ]);
 
       const assets = assetsRes.data.data || [];
@@ -48,8 +48,8 @@ const Dashboard = () => {
       // Calculate stats
       const available = assets.filter(a => a.status === 'Available').length;
       const allocated = assets.filter(a => a.status === 'Allocated').length;
-      const maintenance = maintenanceList.filter(m => ['Approved', 'In Progress'].includes(m.status)).length;
-      const activeBookings = bookings.filter(b => b.status === 'Upcoming' || b.status === 'Ongoing').length;
+      const maintenance = maintenanceList.filter(m => ['Approved', 'Technician Assigned', 'In Progress'].includes(m.status)).length;
+      const activeBookings = bookings.filter(b => ['Upcoming', 'Ongoing'].includes(b.status)).length;
       
       // Calculate returns (overdue vs upcoming)
       let overdue = 0;
@@ -57,7 +57,7 @@ const Dashboard = () => {
       const today = new Date();
 
       allocations.forEach(alloc => {
-        if (alloc.status === 'Active' && alloc.expectedReturnDate) {
+        if (alloc.status === 'Allocated' && alloc.expectedReturnDate) {
           const expDate = new Date(alloc.expectedReturnDate);
           if (expDate < today) {
             overdue++;

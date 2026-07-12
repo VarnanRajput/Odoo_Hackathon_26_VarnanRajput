@@ -3,16 +3,23 @@ import api from '../services/api';
 
 const AuthContext = createContext();
 
+const normalizeRole = (role) => {
+  if (!role) return 'Employee';
+  const value = String(role).trim().toLowerCase();
+  if (value === 'asset manager' || value === 'assetmanager') return 'AssetManager';
+  if (value === 'department head' || value === 'departmenthead') return 'DepartmentHead';
+  return role;
+};
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Initialize and check token
   useEffect(() => {
     const initializeAuth = async () => {
       const storedToken = localStorage.getItem('token') || sessionStorage.getItem('token');
-      
+
       if (!storedToken) {
         setLoading(false);
         return;
@@ -36,7 +43,6 @@ export const AuthProvider = ({ children }) => {
 
     initializeAuth();
 
-    // Listen for global unauthorized interceptor events
     const handleUnauthorized = () => {
       setUser(null);
       setToken(null);
@@ -51,10 +57,10 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password, rememberMe) => {
     try {
       const res = await api.post('/auth/login', { email, password, rememberMe });
-      
+
       if (res.data && res.data.success) {
         const { token: userToken, user: userData } = res.data;
-        
+
         if (rememberMe) {
           localStorage.setItem('token', userToken);
         } else {
@@ -72,11 +78,10 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (name, email, password) => {
     try {
-      const res = await api.post('/auth/signup', { name, email, password });
-      
+      const res = await api.post('/auth/register', { name, email, password });
+
       if (res.data && res.data.success) {
         const { token: userToken, user: userData } = res.data;
-        // Default session store
         sessionStorage.setItem('token', userToken);
         setToken(userToken);
         setUser(userData);
@@ -96,7 +101,8 @@ export const AuthProvider = ({ children }) => {
 
   const hasRole = (roles) => {
     if (!user) return false;
-    return roles.includes(user.role);
+    const normalizedUserRole = normalizeRole(user.role);
+    return roles.some((role) => normalizeRole(role) === normalizedUserRole);
   };
 
   return (
