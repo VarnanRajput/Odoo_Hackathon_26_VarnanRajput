@@ -83,15 +83,22 @@ const Reports = () => {
           
           <div className="flex-1 flex gap-4 pt-4">
             {/* Y-Axis Labels */}
-            <div className="flex flex-col justify-between text-[9px] font-bold text-sky-700/60 dark:text-sky-400/60 h-28 pb-8 pt-1 shrink-0 select-none text-right w-8">
+            <div className="flex flex-col justify-between text-[9px] font-bold text-sky-700/60 dark:text-sky-400/60 h-28 pb-2 pt-6 shrink-0 select-none text-right w-8">
               <span>100%</span>
               <span>50%</span>
               <span>0%</span>
             </div>
 
             {/* Bars container */}
-            <div className="flex-1 flex flex-col">
-              <div className="flex-1 flex items-end justify-between px-4 pb-2 border-b border-sky-500/10 pt-6 h-28">
+            <div className="flex-1 flex flex-col relative">
+              {/* Background Grid Ticks (Grid Lines structure) */}
+              <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-2 pt-6">
+                <div className="border-t border-sky-500/10 w-full" />
+                <div className="border-t border-sky-500/10 w-full" />
+                <div className="border-t border-sky-500/10 w-full" />
+              </div>
+
+              <div className="flex-1 flex items-end justify-between px-4 pb-2 border-b border-sky-500/10 pt-6 h-28 relative z-10">
                 <div className="flex flex-col items-center gap-1.5 w-[12%]">
                   <div className="w-full bg-amber-400 dark:bg-amber-500 rounded-t-md shadow-sm" style={{ height: '50px' }} />
                   <span className="text-[8px] font-bold text-sky-700 dark:text-sky-400">IT</span>
@@ -134,19 +141,24 @@ const Reports = () => {
 
           <div className="flex-1 flex gap-4 pt-4">
             {/* Y-Axis Labels */}
-            <div className="flex flex-col justify-between text-[9px] font-bold text-sky-700/60 dark:text-sky-400/60 h-28 pb-8 pt-1 shrink-0 select-none text-right w-8">
+            <div className="flex flex-col justify-between text-[9px] font-bold text-sky-700/60 dark:text-sky-400/60 h-28 pb-2 pt-6 shrink-0 select-none text-right w-8">
               <span>20 Rpr</span>
               <span>10 Rpr</span>
               <span>0 Rpr</span>
             </div>
 
             {/* Line Graph container */}
-            <div className="flex-1 flex flex-col">
-              <div className="flex-1 relative flex items-end border-b border-sky-500/10 h-28">
+            <div className="flex-1 flex flex-col relative">
+              {/* Background Grid Ticks (Grid Lines structure) */}
+              <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-2 pt-6">
+                <div className="border-t border-sky-500/10 w-full" />
+                <div className="border-t border-sky-500/10 w-full" />
+                <div className="border-t border-sky-500/10 w-full" />
+              </div>
+
+              <div className="flex-1 relative flex items-end border-b border-sky-500/10 h-28 pt-6 pb-2 z-10">
                 {/* Draw custom SVG red line graph */}
                 <svg className="w-full h-20 overflow-visible" viewBox="0 0 100 50" preserveAspectRatio="none">
-                  {/* Grid guide */}
-                  <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(14, 165, 233, 0.05)" strokeWidth="1" />
                   {/* SVG Red Line graph */}
                   <path
                     d="M 5,40 L 25,25 L 45,35 L 65,15 L 85,10 M 85,10"

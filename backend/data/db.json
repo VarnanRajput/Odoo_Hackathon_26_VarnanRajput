@@ -427,6 +427,15 @@
       "createdAt": "2026-07-12T10:38:28.345Z",
       "updatedAt": "2026-07-12T10:38:28.345Z",
       "timestamp": "2026-07-12T10:38:28.345Z"
+    },
+    {
+      "_id": "b7mwpafmrho2i9t",
+      "action": "User Logged In",
+      "details": "System Admin logged into the system.",
+      "performedBy": "andx7nkmrhnkw0q",
+      "createdAt": "2026-07-12T10:44:45.953Z",
+      "updatedAt": "2026-07-12T10:44:45.953Z",
+      "timestamp": "2026-07-12T10:44:45.953Z"
     }
   ],
   "notifications": [
